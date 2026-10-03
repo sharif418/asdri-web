@@ -30,7 +30,9 @@ The client's original documents are in `docs/source/`. The `*.extracted.txt` fil
 ## 3. Engineering conventions
 
 - TypeScript strict. No `any` without a comment explaining why.
-- Payload collections live in `src/collections/<Name>.ts`, one per file, exported and registered in `src/payload.config.ts`. Globals in `src/globals/`.
+- Payload collections live in `src/collections/<Name>.ts`, one per file, exported and registered in `src/payload.config.ts`. Globals in `src/globals/` (`site-settings` holds identity, contact and the module feature flags; `navigation` holds header and footer menus; `impact-stats` the counters).
+- Public routes live under `src/app/(frontend)/[locale]/`. Bangla has no URL prefix, English is `/en/...`; `src/proxy.ts` rewrites prefix-less URLs to the `bn` segment. Build hrefs with `localizedHref(locale, path)` from `src/i18n/config.ts`; read interface strings from `getDictionary(locale)` (`src/i18n/dictionaries/`), never hard-code them. Pass `locale` to every Payload query.
+- Site chrome (header, footer, brand, locale switcher) lives in `src/components/site/`; the header is a three-row masthead on desktop (utility bar, wordmark row, sticky nav row) and a sticky single row with a drawer on mobile.
 - Page-builder blocks in `src/blocks/<Name>/{config.ts,Component.tsx}`.
 - UI primitives in `src/components/ui/`; composed sections in `src/components/sections/`.
 - Server components by default; `"use client"` only where interaction needs it.

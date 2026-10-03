@@ -110,12 +110,14 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('bn' | 'en') | ('bn' | 'en')[];
   globals: {
-    header: Header;
-    footer: Footer;
+    'site-settings': SiteSetting;
+    navigation: Navigation;
+    'impact-stats': ImpactStat;
   };
   globalsSelect: {
-    header: HeaderSelect<false> | HeaderSelect<true>;
-    footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+    'impact-stats': ImpactStatsSelect<false> | ImpactStatsSelect<true>;
   };
   locale: 'bn' | 'en';
   widgets: {
@@ -1628,27 +1630,358 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header".
+ * via the `definition` "site-settings".
  */
-export interface Header {
+export interface SiteSetting {
   id: number;
-  navItems?:
+  /**
+   * Full institute name as shown in the header and footer.
+   */
+  name: string;
+  /**
+   * Short form for tight spaces (mobile header, browser tab).
+   */
+  shortName?: string | null;
+  tagline?: string | null;
+  /**
+   * The Foundation relationship line, e.g. “আস-সুন্নাহ ফাউন্ডেশনের একটি শিক্ষাপ্রতিষ্ঠান”.
+   */
+  parentLine?: string | null;
+  parentUrl?: string | null;
+  /**
+   * Optional. Until a logo exists the site uses a typographic wordmark.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Prospectus PDF for the hero button. Button is hidden while empty.
+   */
+  prospectus?: (number | null) | Media;
+  phones?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        /**
+         * International format, e.g. +880 1805-437910
+         */
+        number: string;
+        /**
+         * e.g. সকাল ৯টা থেকে বিকাল ৫টা
+         */
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  email?: string | null;
+  addresses?:
+    | {
+        label: string;
+        text: string;
+        /**
+         * Google Maps link or embed URL
+         */
+        mapUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  social?:
+    | {
+        platform: 'facebook' | 'youtube' | 'whatsapp' | 'telegram' | 'instagram' | 'x' | 'linkedin';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * QR code image shown in the footer for admission updates (REQ-CON-03).
+   */
+  admissionQr?: (number | null) | Media;
+  otherWebsites?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  features?: {
+    admissions?: boolean | null;
+    donations?: boolean | null;
+    zakatCalculator?: boolean | null;
+    blog?: boolean | null;
+    notices?: boolean | null;
+    gallery?: boolean | null;
+    downloads?: boolean | null;
+    faq?: boolean | null;
+    fatwa?: boolean | null;
+    clarifications?: boolean | null;
+    library?: boolean | null;
+    books?: boolean | null;
+    researchProjects?: boolean | null;
+    videos?: boolean | null;
+    news?: boolean | null;
+    events?: boolean | null;
+    comments?: boolean | null;
+    sponsorship?: boolean | null;
+    donorPortal?: boolean | null;
+    recurring?: boolean | null;
+    international?: boolean | null;
+    campaigns?: boolean | null;
+    studentPortal?: boolean | null;
+    alumniPortal?: boolean | null;
+    facebookFeed?: boolean | null;
+    search?: boolean | null;
+    /**
+     * Login / Create account links in the header
+     */
+    accounts?: boolean | null;
+    /**
+     * Theme switch in the footer
+     */
+    darkMode?: boolean | null;
+  };
+  defaultDescription?: string | null;
+  defaultOgImage?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface Navigation {
+  id: number;
+  primary?:
+    | {
+        label: string;
+        /**
+         * Path ("/academics/courses") or full URL
+         */
+        href: string;
+        newTab?: boolean | null;
+        /**
+         * Hide when this module is off
+         */
+        feature?:
+          | (
+              | 'admissions'
+              | 'donations'
+              | 'zakatCalculator'
+              | 'blog'
+              | 'notices'
+              | 'gallery'
+              | 'downloads'
+              | 'faq'
+              | 'fatwa'
+              | 'clarifications'
+              | 'library'
+              | 'books'
+              | 'researchProjects'
+              | 'videos'
+              | 'news'
+              | 'events'
+              | 'sponsorship'
+              | 'donorPortal'
+              | 'studentPortal'
+              | 'alumniPortal'
+              | 'search'
+              | 'accounts'
+            )
+          | null;
+        children?:
+          | {
+              label: string;
+              /**
+               * Path ("/academics/courses") or full URL
+               */
+              href: string;
+              newTab?: boolean | null;
+              /**
+               * Hide when this module is off
+               */
+              feature?:
+                | (
+                    | 'admissions'
+                    | 'donations'
+                    | 'zakatCalculator'
+                    | 'blog'
+                    | 'notices'
+                    | 'gallery'
+                    | 'downloads'
+                    | 'faq'
+                    | 'fatwa'
+                    | 'clarifications'
+                    | 'library'
+                    | 'books'
+                    | 'researchProjects'
+                    | 'videos'
+                    | 'news'
+                    | 'events'
+                    | 'sponsorship'
+                    | 'donorPortal'
+                    | 'studentPortal'
+                    | 'alumniPortal'
+                    | 'search'
+                    | 'accounts'
+                  )
+                | null;
+              /**
+               * One short line under the label in the dropdown
+               */
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  cta?: {
+    label?: string | null;
+    href?: string | null;
+  };
+  utility?:
+    | {
+        label: string;
+        /**
+         * Path ("/academics/courses") or full URL
+         */
+        href: string;
+        newTab?: boolean | null;
+        /**
+         * Hide when this module is off
+         */
+        feature?:
+          | (
+              | 'admissions'
+              | 'donations'
+              | 'zakatCalculator'
+              | 'blog'
+              | 'notices'
+              | 'gallery'
+              | 'downloads'
+              | 'faq'
+              | 'fatwa'
+              | 'clarifications'
+              | 'library'
+              | 'books'
+              | 'researchProjects'
+              | 'videos'
+              | 'news'
+              | 'events'
+              | 'sponsorship'
+              | 'donorPortal'
+              | 'studentPortal'
+              | 'alumniPortal'
+              | 'search'
+              | 'accounts'
+            )
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerColumns?:
+    | {
+        /**
+         * Column heading
+         */
+        label: string;
+        links?:
+          | {
+              label: string;
+              /**
+               * Path ("/academics/courses") or full URL
+               */
+              href: string;
+              newTab?: boolean | null;
+              /**
+               * Hide when this module is off
+               */
+              feature?:
+                | (
+                    | 'admissions'
+                    | 'donations'
+                    | 'zakatCalculator'
+                    | 'blog'
+                    | 'notices'
+                    | 'gallery'
+                    | 'downloads'
+                    | 'faq'
+                    | 'fatwa'
+                    | 'clarifications'
+                    | 'library'
+                    | 'books'
+                    | 'researchProjects'
+                    | 'videos'
+                    | 'news'
+                    | 'events'
+                    | 'sponsorship'
+                    | 'donorPortal'
+                    | 'studentPortal'
+                    | 'alumniPortal'
+                    | 'search'
+                    | 'accounts'
+                  )
+                | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  legal?:
+    | {
+        label: string;
+        /**
+         * Path ("/academics/courses") or full URL
+         */
+        href: string;
+        newTab?: boolean | null;
+        /**
+         * Hide when this module is off
+         */
+        feature?:
+          | (
+              | 'admissions'
+              | 'donations'
+              | 'zakatCalculator'
+              | 'blog'
+              | 'notices'
+              | 'gallery'
+              | 'downloads'
+              | 'faq'
+              | 'fatwa'
+              | 'clarifications'
+              | 'library'
+              | 'books'
+              | 'researchProjects'
+              | 'videos'
+              | 'news'
+              | 'events'
+              | 'sponsorship'
+              | 'donorPortal'
+              | 'studentPortal'
+              | 'alumniPortal'
+              | 'search'
+              | 'accounts'
+            )
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Figures shown on the home page. Please confirm with the office: the alumni total (293) does not match the batch totals (104) in the source document.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "impact-stats".
+ */
+export interface ImpactStat {
+  id: number;
+  stats?:
+    | {
+        label: string;
+        value: number;
+        /**
+         * "+" for “and more”; leave empty for an exact count
+         */
+        suffix?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -1657,50 +1990,146 @@ export interface Header {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
+ * via the `definition` "site-settings_select".
  */
-export interface Footer {
-  id: number;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header_select".
- */
-export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
+export interface SiteSettingsSelect<T extends boolean = true> {
+  name?: T;
+  shortName?: T;
+  tagline?: T;
+  parentLine?: T;
+  parentUrl?: T;
+  logo?: T;
+  prospectus?: T;
+  phones?:
     | T
     | {
-        link?:
+        number?: T;
+        note?: T;
+        id?: T;
+      };
+  email?: T;
+  addresses?:
+    | T
+    | {
+        label?: T;
+        text?: T;
+        mapUrl?: T;
+        id?: T;
+      };
+  social?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  admissionQr?: T;
+  otherWebsites?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  features?:
+    | T
+    | {
+        admissions?: T;
+        donations?: T;
+        zakatCalculator?: T;
+        blog?: T;
+        notices?: T;
+        gallery?: T;
+        downloads?: T;
+        faq?: T;
+        fatwa?: T;
+        clarifications?: T;
+        library?: T;
+        books?: T;
+        researchProjects?: T;
+        videos?: T;
+        news?: T;
+        events?: T;
+        comments?: T;
+        sponsorship?: T;
+        donorPortal?: T;
+        recurring?: T;
+        international?: T;
+        campaigns?: T;
+        studentPortal?: T;
+        alumniPortal?: T;
+        facebookFeed?: T;
+        search?: T;
+        accounts?: T;
+        darkMode?: T;
+      };
+  defaultDescription?: T;
+  defaultOgImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  primary?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        newTab?: T;
+        feature?: T;
+        children?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
               label?: T;
+              href?: T;
+              newTab?: T;
+              feature?: T;
+              description?: T;
+              id?: T;
             };
+        id?: T;
+      };
+  cta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  utility?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        newTab?: T;
+        feature?: T;
+        id?: T;
+      };
+  footerColumns?:
+    | T
+    | {
+        label?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              newTab?: T;
+              feature?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  legal?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        newTab?: T;
+        feature?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -1709,21 +2138,15 @@ export interface HeaderSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer_select".
+ * via the `definition` "impact-stats_select".
  */
-export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+export interface ImpactStatsSelect<T extends boolean = true> {
+  stats?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
+        label?: T;
+        value?: T;
+        suffix?: T;
         id?: T;
       };
   updatedAt?: T;

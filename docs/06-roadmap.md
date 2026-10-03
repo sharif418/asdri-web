@@ -5,8 +5,8 @@ Phases are scoped so each ends with something the client can click on. Durations
 ## Phase 0 — Foundation (week 1–2, in parallel with phase 1 start)
 
 - [x] Requirements extracted with IDs, gap register, data model, design direction (this repo)
-- [ ] Repo scaffold: Next.js 15 + Payload 3 + Postgres + S3 storage, Docker, CI, Coolify staging
-- [ ] Design tokens + type specimen page approved
+- [x] Repo scaffold: Next.js + Payload 3 + Postgres + S3 storage, Docker, CI (Coolify staging pending)
+- [x] Design tokens + type specimen page built (`/design`); client approval pending
 - [ ] Client decisions requested: GAP-B1 gateway, GAP-B3 domain, GAP-B4 brand/logo
 
 ## Phase 1 — Launchable institutional site (weeks 2–7)

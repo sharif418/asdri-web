@@ -33,8 +33,8 @@ Deliver: the PR link, a short summary of what was built, and any gap-register ro
 
 | Order | Assignment | IDs |
 |-------|------------|-----|
-| 1 | Design tokens + type specimen page `/design`; fonts; colour tokens; base components | 05-design-direction §2–4 |
-| 2 | `site-settings`, `navigation`, `impact-stats` globals + Header/Footer rewrite + locale switcher | REQ-GEN-01..04, REQ-HOME-02, 12 |
+| 1 | ✅ Design tokens + type specimen page `/design`; fonts; colour tokens; base components (PR #1) | 05-design-direction §2–4 |
+| 2 | ✅ `site-settings`, `navigation`, `impact-stats` globals + Header/Footer + locale routing and switcher + seed (PR #2) | REQ-GEN-01..04, REQ-HOME-02, 12 |
 | 3 | `people` collection + Leadership page + Faculty directory + profile | REQ-ABT-02, REQ-ACA-10 |
 | 4 | `courses` collection with curriculum tables + seed of 7 courses from source | REQ-ACA-01..09 |
 | 5 | `notices` + board + status badge + attachments | REQ-NOT-01..06, REQ-HOME-06 |
