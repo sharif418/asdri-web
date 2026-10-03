@@ -166,10 +166,14 @@ export default function DesignSpecimenPage() {
           </div>
           <div className="space-y-3">
             <p className="text-caption text-ink-muted">Headings</p>
-            <h1 className="text-h1">Preparatory Year for Specialization</h1>
-            <h2 className="text-h2">কোর্সের ধরন ও ভর্তির যোগ্যতা</h2>
-            <h3 className="text-h3">১ম সেমিস্টার: মোট ক্রেডিট ১৭, মোট নম্বর ৬০০</h3>
-            <h4 className="text-h4">সম্পূরক কোর্সসমূহ (নন-ক্রেডিট বাধ্যতামূলক)</h4>
+            <p className="text-h1 font-serif font-semibold">Preparatory Year for Specialization</p>
+            <p className="text-h2 font-serif font-semibold">কোর্সের ধরন ও ভর্তির যোগ্যতা</p>
+            <p className="text-h3 font-serif font-semibold">
+              ১ম সেমিস্টার: মোট ক্রেডিট ১৭, মোট নম্বর ৬০০
+            </p>
+            <p className="text-h4 font-serif font-semibold">
+              সম্পূরক কোর্সসমূহ (নন-ক্রেডিট বাধ্যতামূলক)
+            </p>
           </div>
           <div>
             <p className="text-caption text-ink-muted">Reading: serif, 68ch, line-height 1.8</p>
@@ -284,11 +288,21 @@ export default function DesignSpecimenPage() {
           <table className="w-full border-collapse text-small">
             <thead>
               <tr className="rule-ink border-b text-left text-caption text-ink-muted">
-                <th className="py-2 pr-4 font-medium">কোড</th>
-                <th className="py-2 pr-4 font-medium">কোর্স</th>
-                <th className="py-2 pr-4 font-medium">মডিউল</th>
-                <th className="py-2 pr-4 text-right font-medium">ক্রেডিট</th>
-                <th className="py-2 text-right font-medium">নম্বর</th>
+                <th scope="col" className="py-2 pr-4 font-medium">
+                  কোড
+                </th>
+                <th scope="col" className="py-2 pr-4 font-medium">
+                  কোর্স
+                </th>
+                <th scope="col" className="py-2 pr-4 font-medium">
+                  মডিউল
+                </th>
+                <th scope="col" className="py-2 pr-4 text-right font-medium">
+                  ক্রেডিট
+                </th>
+                <th scope="col" className="py-2 text-right font-medium">
+                  নম্বর
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
