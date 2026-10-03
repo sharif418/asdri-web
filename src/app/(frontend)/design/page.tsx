@@ -379,6 +379,34 @@ export default function DesignSpecimenPage() {
         />
       </Spec>
 
+      <Spec id="family" title="ফাউন্ডেশন পরিবার">
+        {/* The relationship line. Brand green is the Foundation's exact colour and appears only here. */}
+        <div className="flex items-center gap-3">
+          <span aria-hidden className="block size-2.5 rounded-full bg-brand-green" />
+          <p className="text-small text-ink-muted">আস-সুন্নাহ ফাউন্ডেশনের একটি শিক্ষাপ্রতিষ্ঠান</p>
+        </div>
+        <dl className="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div>
+            <dt className="text-caption text-ink-muted">ফাউন্ডেশন সাইট</dt>
+            <dd className="mt-1 text-small">
+              Bornomala (sans, ২ ওজন), সব হেডিং বোল্ড ও মাঝখানে; সবুজ #008E48, সোনালি #E8B65D; ৮px
+              কার্ড ও ছায়া
+            </dd>
+          </div>
+          <div>
+            <dt className="text-caption text-ink-muted">ইনস্টিটিউট সাইট</dt>
+            <dd className="mt-1 text-small">
+              Noto Serif Bengali হেডিং, Noto Sans Bengali ইন্টারফেস (৪ ওজন); একই সবুজ-সোনালি
+              পরিবারের গাঢ় ও শান্ত সংস্করণ; রেখা ও মার্জিন, ছায়া নেই
+            </dd>
+          </div>
+        </dl>
+        <p className="mt-6 max-w-prose text-small text-ink-muted">
+          পাশাপাশি রাখলে দুটি সাইট একই পরিবারের মনে হবে; ইনস্টিটিউটেরটা পড়ার জন্য তৈরি,
+          ফাউন্ডেশনেরটা জানানোর জন্য।
+        </p>
+      </Spec>
+
       <Spec id="dark" title="গাঢ় থিম">
         <div data-theme="dark" className="rounded-md bg-background p-6 text-foreground md:p-8">
           <h3 className="text-h3">গাঢ় থিমে একই টোকেন</h3>

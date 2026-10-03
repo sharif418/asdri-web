@@ -12,15 +12,16 @@ Written before any UI code, reviewed against §3a of `05-design-direction.md`. C
 
 | Name | Light | Role |
 |------|-------|------|
-| Ink | `oklch(24% 0.02 170)` | text, rules on dark bands |
-| Stone | `oklch(98.2% 0.004 160)` | page background (cool, faintly green; not cream) |
+| Ink | `oklch(25% 0.03 168)` | text, rules on dark bands (Foundation dark green hue) |
+| Stone | `oklch(98.2% 0.004 165)` | page background (cool, faintly green; not cream) |
 | Panel | `oklch(100% 0 0)` | reading surfaces that sit on stone |
-| Mihrab green | `oklch(42% 0.085 165)` | primary actions, links, active states |
-| Mihrab deep | `oklch(30% 0.07 165)` | dark bands, pressed states |
-| Tazhib gold | `oklch(66% 0.12 80)` | illumination: one element per screen |
+| Mihrab green | `oklch(44% 0.10 153)` | primary actions, links, active states (Foundation green hue, deeper) |
+| Mihrab deep | `oklch(31% 0.075 155)` | dark bands, pressed states |
+| Tazhib gold | `oklch(68% 0.13 72)` | illumination: one element per screen (Foundation gold family) |
 | Rule | `oklch(87% 0.012 160)` | hairlines |
+| Brand green | `#008E48` | the Foundation's exact green, only for the Foundation mark |
 
-Dark mode inverts stone/ink and lifts green and gold in lightness; tokens are defined for both.
+Hues are aligned to the Foundation's palette so the two sites read as relatives (docs/09-foundation-site-benchmark.md). Dark mode inverts stone/ink and lifts green and gold in lightness; tokens are defined for both.
 
 ## Type
 

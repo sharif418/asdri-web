@@ -32,23 +32,28 @@
  * (primary), tazhib gold (illumination, one use per screen), rule (hairlines).
  * ---------------------------------------------------------------------------------------- */
 :root {
-  --background: oklch(98.2% 0.004 160);
-  --foreground: oklch(24% 0.02 170);
-  --ink-muted: oklch(46% 0.015 170);
+  --background: oklch(98.2% 0.004 165);
+  --foreground: oklch(25% 0.03 168); /* Foundation dark green hue (#0F2920 = 25.7% 0.037 168) */
+  --ink-muted: oklch(46% 0.018 168);
   --card: oklch(100% 0 0);
   --card-foreground: var(--foreground);
-  --paper-2: oklch(95.6% 0.008 160);
+  --paper-2: oklch(95.8% 0.006 165); /* Foundation soft band #EEF2F0 */
+  --brand-green: #008e48; /* Foundation brand green, used only for the Foundation mark */
   --popover: var(--card);
   --popover-foreground: var(--foreground);
 
-  --primary: oklch(42% 0.085 165);
-  --primary-deep: oklch(30% 0.07 165);
+  --primary: oklch(
+    44% 0.1 153
+  ); /* Foundation green hue (#008E48 = 56.7% 0.148 152), deeper for an institute */
+  --primary-deep: oklch(31% 0.075 155);
   --primary-foreground: oklch(98% 0.005 160);
-  --primary-soft: oklch(93.5% 0.03 165);
+  --primary-soft: oklch(93.5% 0.035 153);
 
-  --accent: oklch(66% 0.12 80);
-  --accent-foreground: oklch(34% 0.07 72);
-  --accent-soft: oklch(94.5% 0.04 85);
+  --accent: oklch(
+    68% 0.13 72
+  ); /* between Foundation gold fill (80% 0.121 80) and gold text (67.6% 0.14 66) */
+  --accent-foreground: oklch(36% 0.08 66);
+  --accent-soft: oklch(94.5% 0.04 80);
 
   --secondary: var(--paper-2);
   --secondary-foreground: var(--foreground);
@@ -72,23 +77,24 @@
 }
 
 [data-theme='dark'] {
-  --background: oklch(19% 0.014 170);
-  --foreground: oklch(94% 0.008 160);
-  --ink-muted: oklch(72% 0.01 160);
-  --card: oklch(23% 0.015 170);
+  --background: oklch(19% 0.016 168);
+  --foreground: oklch(94% 0.008 165);
+  --ink-muted: oklch(72% 0.01 165);
+  --card: oklch(23% 0.016 168);
   --card-foreground: var(--foreground);
-  --paper-2: oklch(26% 0.015 170);
+  --paper-2: oklch(26% 0.016 168);
+  --brand-green: #2fb56e;
   --popover: var(--card);
   --popover-foreground: var(--foreground);
 
-  --primary: oklch(74% 0.09 160);
-  --primary-deep: oklch(26% 0.05 165);
-  --primary-foreground: oklch(17% 0.03 170);
-  --primary-soft: oklch(30% 0.05 165);
+  --primary: oklch(74% 0.1 153);
+  --primary-deep: oklch(26% 0.05 155);
+  --primary-foreground: oklch(17% 0.03 168);
+  --primary-soft: oklch(30% 0.05 153);
 
-  --accent: oklch(78% 0.11 85);
-  --accent-foreground: oklch(90% 0.06 85);
-  --accent-soft: oklch(31% 0.05 80);
+  --accent: oklch(78% 0.12 75);
+  --accent-foreground: oklch(90% 0.06 80);
+  --accent-soft: oklch(31% 0.05 75);
 
   --secondary: var(--paper-2);
   --secondary-foreground: var(--foreground);
@@ -160,6 +166,7 @@
   --color-primary-deep: var(--primary-deep);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-soft: var(--primary-soft);
+  --color-brand-green: var(--brand-green);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
