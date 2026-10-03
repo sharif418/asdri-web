@@ -75,6 +75,9 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    faqs: Faq;
+    downloads: Download;
+    'alumni-batches': AlumniBatch;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -100,6 +103,9 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
+    downloads: DownloadsSelect<false> | DownloadsSelect<true>;
+    'alumni-batches': AlumniBatchesSelect<false> | AlumniBatchesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -120,12 +126,16 @@ export interface Config {
     navigation: Navigation;
     'impact-stats': ImpactStat;
     home: Home;
+    'about-content': AboutContent;
+    'admissions-content': AdmissionsContent;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     'impact-stats': ImpactStatsSelect<false> | ImpactStatsSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
+    'about-content': AboutContentSelect<false> | AboutContentSelect<true>;
+    'admissions-content': AdmissionsContentSelect<false> | AdmissionsContentSelect<true>;
   };
   locale: 'bn' | 'en';
   widgets: {
@@ -400,6 +410,8 @@ export interface FolderInterface {
   createdAt: string;
 }
 /**
+ * Shared category lists, separated by kind. FAQ categories become the tabs on the FAQ page (REQ-ADM-04); blog and other kinds are used by their modules later.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
@@ -411,6 +423,14 @@ export interface Category {
    */
   generateSlug?: boolean | null;
   slug: string;
+  /**
+   * Which module this category belongs to. FAQ categories are the FAQ page tabs.
+   */
+  kind: 'blog' | 'fatwa' | 'publication' | 'download' | 'faq' | 'video';
+  /**
+   * Sort order within the kind (smaller first).
+   */
+  order?: number | null;
   parent?: (number | null) | Category;
   breadcrumbs?:
     | {
@@ -1132,6 +1152,102 @@ export interface Notice {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Frequently asked questions, grouped by category on the FAQ page. Questions seeded by the installer are SAMPLES to show the accordion — replace them with the office’s real questions.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  category: number | Category;
+  /**
+   * Sort order within the category (smaller first).
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Downloadable files: syllabi, forms and dawah materials. The seed installs three clearly marked SAMPLES so the rows, filters and download action are visible — replace them with real files.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "downloads".
+ */
+export interface Download {
+  id: number;
+  title: string;
+  category: 'syllabus' | 'form' | 'dawah-material' | 'prospectus' | 'other';
+  /**
+   * One line under the title on the row (what the file is for).
+   */
+  description?: string | null;
+  /**
+   * PDF or document. Prefer PDF for printables.
+   */
+  file: number | Media;
+  /**
+   * Optional: the course this syllabus or form belongs to.
+   */
+  course?: (number | null) | Course;
+  /**
+   * Print-ready (dawah posters, pamphlets). Shows the print note on the row.
+   */
+  printable?: boolean | null;
+  /**
+   * Sort order within the category (smaller first).
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Batch statistics for the alumni page. GAP-C1: the document’s batches sum to 104 while the home figure says 293+ — the office must confirm the totals; each row is editable until then.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "alumni-batches".
+ */
+export interface AlumniBatch {
+  id: number;
+  /**
+   * Programme name as the client document writes it, e.g. পোস্ট গ্রাজুয়েট ডিপ্লোমা ইন ইসলামিক দাওয়াহ (PGDID).
+   */
+  programme: string;
+  /**
+   * e.g. ১ম ব্যাচ (the document’s own label).
+   */
+  batchLabel: string;
+  /**
+   * Number of graduates in the batch.
+   */
+  graduates: number;
+  order?: number | null;
+  /**
+   * Optional line under the batch (year, remark).
+   */
+  note?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
@@ -1352,6 +1468,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'downloads';
+        value: number | Download;
+      } | null)
+    | ({
+        relationTo: 'alumni-batches';
+        value: number | AlumniBatch;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1867,6 +1995,8 @@ export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   generateSlug?: T;
   slug?: T;
+  kind?: T;
+  order?: T;
   parent?: T;
   breadcrumbs?:
     | T
@@ -1902,6 +2032,49 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  category?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "downloads_select".
+ */
+export interface DownloadsSelect<T extends boolean = true> {
+  title?: T;
+  category?: T;
+  description?: T;
+  file?: T;
+  course?: T;
+  printable?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "alumni-batches_select".
+ */
+export interface AlumniBatchesSelect<T extends boolean = true> {
+  programme?: T;
+  batchLabel?: T;
+  graduates?: T;
+  order?: T;
+  note?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2239,9 +2412,13 @@ export interface SiteSetting {
       }[]
     | null;
   /**
-   * QR code image shown in the footer for admission updates (REQ-CON-03).
+   * QR code image shown in the footer and on the contact page for admission updates (REQ-CON-03).
    */
   admissionQr?: (number | null) | Media;
+  /**
+   * The admission-info note on the contact page (REQ-CON-03), verbatim from the client document — where admission notices are announced.
+   */
+  admissionNote?: string | null;
   otherWebsites?:
     | {
         label: string;
@@ -2652,6 +2829,10 @@ export interface Home {
              */
             heading: string;
             /**
+             * The line above the list, verbatim from the client document. Shown on the home section and the Campus page (single source).
+             */
+            intro?: string | null;
+            /**
              * The document marks photo slots; upload them per item when photos arrive (GAP-C6).
              */
             items?:
@@ -2717,6 +2898,78 @@ export interface Home {
   createdAt?: string | null;
 }
 /**
+ * লক্ষ্য ও উদ্দেশ্য and ক্যাম্পাস ও সুবিধা. The thirteen objectives are the client’s own words; they are a list, not a sequence, and render unnumbered.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-content".
+ */
+export interface AboutContent {
+  id: number;
+  /**
+   * মূল লক্ষ্য (Vision) — the statement shown on /about.
+   */
+  visionStatement?: string | null;
+  /**
+   * The thirteen objectives from the client document, in order, verbatim.
+   */
+  objectives?:
+    | {
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Residence, library & lab, amali tracker, spiritual environment — titled rows on /about/campus.
+   */
+  facilities?:
+    | {
+        title: string;
+        body: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The intro paragraph on /about/alumni, verbatim from the client document. Batch numbers come from the Alumni batches collection.
+   */
+  alumniIntro?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * ভর্তি প্রক্রিয়া and স্কলারশিপ ও আর্থিক সহায়তা. The five steps are a sequence; the page renders Bengali numerals automatically.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admissions-content".
+ */
+export interface AdmissionsContent {
+  id: number;
+  /**
+   * The line above the five steps.
+   */
+  processIntro?: string | null;
+  /**
+   * Online application, screening, written test, viva, final admission — in order.
+   */
+  steps?:
+    | {
+        title: string;
+        body: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The scholarship & financial aid text, verbatim.
+   */
+  scholarshipParagraphs?:
+    | {
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
@@ -2752,6 +3005,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   admissionQr?: T;
+  admissionNote?: T;
   otherWebsites?:
     | T
     | {
@@ -2955,6 +3209,7 @@ export interface HomeSelect<T extends boolean = true> {
           | {
               enabled?: T;
               heading?: T;
+              intro?: T;
               items?:
                 | T
                 | {
@@ -3000,6 +3255,53 @@ export interface HomeSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-content_select".
+ */
+export interface AboutContentSelect<T extends boolean = true> {
+  visionStatement?: T;
+  objectives?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  facilities?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        id?: T;
+      };
+  alumniIntro?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admissions-content_select".
+ */
+export interface AdmissionsContentSelect<T extends boolean = true> {
+  processIntro?: T;
+  steps?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        id?: T;
+      };
+  scholarshipParagraphs?:
+    | T
+    | {
+        value?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

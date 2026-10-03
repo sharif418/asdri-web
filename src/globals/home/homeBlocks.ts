@@ -126,6 +126,15 @@ export const CampusBlock: Block = {
     enabledField(true),
     headingField('Campus life as a ruled two-column list.'),
     {
+      name: 'intro',
+      type: 'textarea',
+      localized: true,
+      admin: {
+        description:
+          'The line above the list, verbatim from the client document. Shown on the home section and the Campus page (single source).',
+      },
+    },
+    {
       name: 'items',
       type: 'array',
       labels: { singular: 'Item', plural: 'Items' },

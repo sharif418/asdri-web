@@ -157,7 +157,7 @@ const primaryBn: Group[] = [
       },
       {
         label: 'দাওয়াহ মেটেরিয়াল',
-        href: '/downloads?category=dawah-materials',
+        href: '/downloads?category=dawah-material',
         feature: 'downloads',
         description: 'প্রিন্টযোগ্য পোস্টার ও বুকলেট',
       },
@@ -334,7 +334,7 @@ const primaryEn: Group[] = [
       },
       {
         label: 'Dawah Materials',
-        href: '/downloads?category=dawah-materials',
+        href: '/downloads?category=dawah-material',
         feature: 'downloads',
         description: 'Printable posters and booklets',
       },

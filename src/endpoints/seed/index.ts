@@ -3,15 +3,21 @@ import type { Payload, PayloadRequest } from 'payload'
 import { navigationSeed } from './navigation'
 import { peopleSeed, seedPeople } from './people'
 import { seedCourses } from './courses'
-import { siteSettingsSeed } from './site-settings'
+import { seedSiteSettings } from './site-settings'
 import { impactStatsSeed } from './impact-stats'
 import { seedNotices } from './notices'
 import { homeSeed } from './home'
+import { aboutSeed } from './about'
+import { admissionsSeed } from './admissions'
+import { seedAlumni } from './alumni'
+import { seedFaqs } from './faqs'
+import { seedDownloads } from './downloads'
 
 /**
  * Starter content for the institute (ADR-0002): site settings, navigation and impact figures in
- * both locales, taken verbatim from docs/source. Idempotent: running it again overwrites the three
- * globals with the same values. It never touches collections, so editors' content is safe.
+ * both locales, taken verbatim from docs/source. Idempotent: running it again overwrites the
+ * globals with the same values and upserts the collections by their natural keys, so editors'
+ * own content is never touched.
  *
  * Localised sub-fields inside non-localised arrays need the same row ids in every locale, so the
  * Bangla pass writes first and the English pass reuses the generated ids by position.
@@ -25,23 +31,37 @@ export const seed = async ({
 }): Promise<void> => {
   payload.logger.info('Seeding ASDRI site globals…')
 
-  await seedGlobal(payload, req, 'site-settings', siteSettingsSeed.bn, siteSettingsSeed.en)
+  await seedSiteSettings(payload, req)
   await seedGlobal(payload, req, 'navigation', navigationSeed.bn, navigationSeed.en)
   await seedGlobal(payload, req, 'impact-stats', impactStatsSeed.bn, impactStatsSeed.en)
+  await seedGlobal(payload, req, 'home', homeSeed.bn, homeSeed.en)
+  await seedGlobal(payload, req, 'about-content', aboutSeed.bn, aboutSeed.en)
+  await seedGlobal(payload, req, 'admissions-content', admissionsSeed.bn, admissionsSeed.en)
   await seedPeople(payload, req, peopleSeed)
   await seedCourses(payload, req)
   await seedNotices(payload, req)
-  await seedGlobal(payload, req, 'home', homeSeed.bn, homeSeed.en)
+  await seedAlumni(payload, req)
+  await seedFaqs(payload, req)
+  await seedDownloads(payload, req)
 
-  payload.logger.info('Seeded globals, home, people, courses and sample notices (bn + en).')
+  payload.logger.info(
+    'Seeded globals, people, courses, notices, alumni batches, FAQ samples and download samples (bn + en).',
+  )
 }
 
+type GlobalSlug =
+  | 'site-settings'
+  | 'navigation'
+  | 'impact-stats'
+  | 'home'
+  | 'about-content'
+  | 'admissions-content'
 type Row = Record<string, unknown>
 
 async function seedGlobal(
   payload: Payload,
   req: PayloadRequest,
-  slug: 'site-settings' | 'navigation' | 'impact-stats' | 'home',
+  slug: GlobalSlug,
   bn: Row,
   en: Row,
 ) {

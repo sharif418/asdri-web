@@ -4,14 +4,19 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
+import { AlumniBatches } from './collections/AlumniBatches'
 import { Categories } from './collections/Categories'
 import { Courses } from './collections/Courses'
+import { Downloads } from './collections/Downloads'
+import { Faqs } from './collections/Faqs'
 import { Media } from './collections/Media'
 import { Notices } from './collections/Notices'
 import { Pages } from './collections/Pages'
 import { People } from './collections/People'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+import { AboutContent } from './globals/AboutContent'
+import { AdmissionsContent } from './globals/AdmissionsContent'
 import { Home } from './globals/Home'
 import { ImpactStats } from './globals/ImpactStats'
 import { Navigation } from './globals/Navigation'
@@ -85,9 +90,21 @@ export default buildConfig({
     defaultLocale: 'bn',
     fallback: true,
   },
-  collections: [Pages, Posts, People, Courses, Notices, Media, Categories, Users],
+  collections: [
+    Pages,
+    Posts,
+    People,
+    Courses,
+    Notices,
+    Media,
+    Categories,
+    Users,
+    Faqs,
+    Downloads,
+    AlumniBatches,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [SiteSettings, Navigation, ImpactStats, Home],
+  globals: [SiteSettings, Navigation, ImpactStats, Home, AboutContent, AdmissionsContent],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
