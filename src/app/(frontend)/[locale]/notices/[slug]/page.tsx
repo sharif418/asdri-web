@@ -66,7 +66,14 @@ export default async function NoticeDetailPage({ params }: Props) {
                 {dict.notices.categoryLabels[notice.category]}
               </MarginFact>
               <MarginFact label={dict.notices.statusLabel}>
-                <NoticeStatusBadge notice={notice} dict={dict.notices} />
+                <NoticeStatusBadge
+                    notice={notice}
+                    labels={{
+                      new: dict.notices.statusNew,
+                      active: dict.notices.statusActive,
+                      closed: dict.notices.statusClosed,
+                    }}
+                  />
               </MarginFact>
             </MarginFacts>
 

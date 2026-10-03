@@ -69,6 +69,8 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    people: Person;
+    courses: Course;
     notices: Notice;
     media: Media;
     categories: Category;
@@ -92,6 +94,8 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    people: PeopleSelect<false> | PeopleSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
     notices: NoticesSelect<false> | NoticesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -115,11 +119,13 @@ export interface Config {
     'site-settings': SiteSetting;
     navigation: Navigation;
     'impact-stats': ImpactStat;
+    home: Home;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     'impact-stats': ImpactStatsSelect<false> | ImpactStatsSelect<true>;
+    home: HomeSelect<false> | HomeSelect<true>;
   };
   locale: 'bn' | 'en';
   widgets: {
@@ -778,6 +784,280 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Leadership, teachers and teams. A person appears on the leadership page when "leadership" is ticked, and in the faculty directory when "faculty" is ticked. Photos and biographies are optional; the public pages fall back to a monogram.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people".
+ */
+export interface Person {
+  id: number;
+  /**
+   * Bangla name verbatim from the client document; English transliteration (editable, GAP-C5).
+   */
+  name: string;
+  /**
+   * Optional. A quiet head-and-shoulders photo; a monogram is shown while empty.
+   */
+  photo?: (number | null) | Media;
+  roles: ('leadership' | 'faculty' | 'staff' | 'author')[];
+  /**
+   * e.g. চেয়ারম্যান, উস্তাজ, আরবি শিক্ষক
+   */
+  designation?: string | null;
+  /**
+   * A teacher can belong to more than one team (the source document lists one teacher under both Tajweed and English).
+   */
+  teams?:
+    ('core' | 'arabic' | 'tajweed' | 'tarbiyah' | 'english' | 'bangla' | 'computer' | 'math' | 'science')[] | null;
+  /**
+   * Subjects this person teaches, as listed in the client document.
+   */
+  subjects?:
+    | {
+        subject: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional. The profile page stays complete while empty.
+   */
+  bio?: string | null;
+  /**
+   * Private. Never shown publicly.
+   */
+  email?: string | null;
+  /**
+   * Private. Never shown publicly.
+   */
+  phone?: string | null;
+  social?:
+    | {
+        platform: 'facebook' | 'youtube' | 'x' | 'linkedin' | 'website';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Show in the featured people section on the home page.
+   */
+  featuredOnHome?: boolean | null;
+  /**
+   * Sort order within lists (smaller first).
+   */
+  order?: number | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Programmes and trainings. Codes follow one scheme (e.g. PYS 1101, CCIS 101, PGD-DIS 1101: prefix, then year+semester, then number — GAP-C3). Semester totals shown on the site are computed from the rows; the totals printed in the client document are kept in the source total fields for reconciliation (GAP-C2).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  title: string;
+  /**
+   * Short code, e.g. PYS. Always Latin digits.
+   */
+  shortTitle?: string | null;
+  /**
+   * Arabic name, shown with lang="ar" under the title.
+   */
+  arabicTitle?: string | null;
+  type: 'long' | 'short';
+  /**
+   * active = full course page. draft = announced but without content yet (shows a marked placeholder — GAP-C4). Named listingStatus: "status" collides with the draft system’s _status on the versions table.
+   */
+  listingStatus: 'active' | 'draft';
+  /**
+   * Sort order within the index (smaller first).
+   */
+  order?: number | null;
+  /**
+   * One sentence for index rows and the home programme cards. Bangla is an excerpt from the client document; keep it verbatim.
+   */
+  summary?: string | null;
+  /**
+   * কোর্স পরিচিতি — the course introduction, verbatim from the client document.
+   */
+  intro?: string | null;
+  /**
+   * লক্ষ্য-উদ্দেশ্য। Rendered as a ruled list.
+   */
+  objectives?:
+    | {
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * কোর্সের ধরন — the summary facts shown in the page margin, plus any further notes from the document as ruled lines.
+   */
+  format?: {
+    /**
+     * e.g. ৩ বছর, ৬ মাস, ১৫ দিন (Bengali digits in Bangla).
+     */
+    durationLabel?: string | null;
+    residential?: ('residential' | 'nonResidential' | 'both') | null;
+    /**
+     * Leave empty when the document does not say.
+     */
+    gender?: ('male' | 'female' | 'all') | null;
+    /**
+     * The remaining কোর্সের ধরন lines from the document, verbatim.
+     */
+    bullets?:
+      | {
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * ভর্তির যোগ্যতা / আবেদন যোগ্যতা। Rendered as a ruled list.
+   */
+  eligibility?:
+    | {
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * PYS: the five specialisation (takhasus) departments with their Arabic names.
+   */
+  specialisations?: {
+    /**
+     * Lead-in line as printed, e.g. পাঁচটি তাখাচ্ছুছ বিভাগ যথাক্রমে:
+     */
+    lead?: string | null;
+    items?:
+      | {
+          name: string;
+          arabicName?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * কোর্স কারিকুলাম — one entry per table in the document (semesters, the non-credit supplementary table). Totals are computed from the rows.
+   */
+  semesters?:
+    | {
+        /**
+         * e.g. ১ম সেমিস্টার; leave empty when the document prints a single unlabelled table.
+         */
+        title?: string | null;
+        subtitle?: string | null;
+        /**
+         * e.g. সময়কাল: ৬ মাস
+         */
+        durationLabel?: string | null;
+        /**
+         * The explanatory paragraph printed with the table, verbatim.
+         */
+        note?: string | null;
+        /**
+         * Credits printed in the document heading (GAP-C2, office reference only; the site computes the total).
+         */
+        sourceTotalCredits?: number | null;
+        /**
+         * Marks printed in the document heading (GAP-C2, office reference only; the site computes the total).
+         */
+        sourceTotalMarks?: number | null;
+        /**
+         * Hours printed in the document heading (GAP-C2, office reference only; the site computes the total).
+         */
+        sourceTotalHours?: number | null;
+        rows?:
+          | {
+              /**
+               * Always Latin digits (GAP-C3).
+               */
+              code?: string | null;
+              title: string;
+              modules?:
+                | {
+                    value: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              credits?: number | null;
+              hours?: number | null;
+              marks?: number | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * শিক্ষার্থী উন্নয়ন কার্যক্রম (Student Development Programs) — the PYS non-credit activities table. Also shown on the Student Development page.
+   */
+  sdp?: {
+    /**
+     * The explanatory paragraph printed with the table, verbatim.
+     */
+    note?: string | null;
+    rows?:
+      | {
+          title: string;
+          hours?: number | null;
+          objective?: string | null;
+          activities?: string | null;
+          outcome?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * The trainings’ topic lists (Ramadan 25 topics, Arabic and Azan curricula).
+   */
+  topics?: {
+    /**
+     * Section heading as printed, e.g. প্রশিক্ষণের বিষয়সমূহ
+     */
+    label?: string | null;
+    items?:
+      | {
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * কোর্স সম্পন্নকারীদের পরবর্তী শিক্ষাক্রম ও কর্মপরিকল্পনা — the Diploma’s next-steps section.
+   */
+  outcomes?: {
+    intro?: string | null;
+    items?:
+      | {
+          heading: string;
+          body: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Show in the six featured programmes on the home page.
+   */
+  featured?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * The notice board. Statuses (নতুন / আবেদন চলছে / আবেদন শেষ) are computed from the dates and can be overridden per notice. The notices installed by the seed are SAMPLES written to show the board, filters and badges — replace them with the office’s real announcements.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1050,6 +1330,14 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'people';
+        value: number | Person;
+      } | null)
+    | ({
+        relationTo: 'courses';
+        value: number | Course;
+      } | null)
+    | ({
         relationTo: 'notices';
         value: number | Notice;
       } | null)
@@ -1287,6 +1575,163 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people_select".
+ */
+export interface PeopleSelect<T extends boolean = true> {
+  name?: T;
+  photo?: T;
+  roles?: T;
+  designation?: T;
+  teams?: T;
+  subjects?:
+    | T
+    | {
+        subject?: T;
+        id?: T;
+      };
+  bio?: T;
+  email?: T;
+  phone?: T;
+  social?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  featuredOnHome?: T;
+  order?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  title?: T;
+  shortTitle?: T;
+  arabicTitle?: T;
+  type?: T;
+  listingStatus?: T;
+  order?: T;
+  summary?: T;
+  intro?: T;
+  objectives?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  format?:
+    | T
+    | {
+        durationLabel?: T;
+        residential?: T;
+        gender?: T;
+        bullets?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+      };
+  eligibility?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  specialisations?:
+    | T
+    | {
+        lead?: T;
+        items?:
+          | T
+          | {
+              name?: T;
+              arabicName?: T;
+              id?: T;
+            };
+      };
+  semesters?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        durationLabel?: T;
+        note?: T;
+        sourceTotalCredits?: T;
+        sourceTotalMarks?: T;
+        sourceTotalHours?: T;
+        rows?:
+          | T
+          | {
+              code?: T;
+              title?: T;
+              modules?:
+                | T
+                | {
+                    value?: T;
+                    id?: T;
+                  };
+              credits?: T;
+              hours?: T;
+              marks?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  sdp?:
+    | T
+    | {
+        note?: T;
+        rows?:
+          | T
+          | {
+              title?: T;
+              hours?: T;
+              objective?: T;
+              activities?: T;
+              outcome?: T;
+              id?: T;
+            };
+      };
+  topics?:
+    | T
+    | {
+        label?: T;
+        items?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+      };
+  outcomes?:
+    | T
+    | {
+        intro?: T;
+        items?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              id?: T;
+            };
+      };
+  featured?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -2094,6 +2539,184 @@ export interface ImpactStat {
   createdAt?: string | null;
 }
 /**
+ * The home page, section by section. Drag the rows to reorder the page; untick a section to hide it. Which programmes and people appear is chosen on the course / person themselves.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home".
+ */
+export interface Home {
+  id: number;
+  /**
+   * One block per section, in display order.
+   */
+  sections?:
+    | (
+        | {
+            enabled?: boolean | null;
+            /**
+             * The large serif headline. Only the hero headline may be centred; nothing else competes with it.
+             */
+            heading: string;
+            /**
+             * One-line statement of purpose beneath the headline (reading text).
+             */
+            tagline?: string | null;
+            /**
+             * Optional intro video (YouTube URL). Shown as a poster that plays on click (GAP-C6).
+             */
+            videoUrl?: string | null;
+            /**
+             * Poster frame for the video. While there is no video, the hero stays typographic.
+             */
+            posterImage?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Section heading. The figures come from Site ▸ Impact stats.
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'impactStats';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * e.g. মূল লক্ষ্য (Vision)
+             */
+            heading: string;
+            /**
+             * The vision statement, verbatim from the client document.
+             */
+            statement: string;
+            /**
+             * Three pillars under the statement. Empty in Bangla until the office provides translations.
+             */
+            pillars?:
+              | {
+                  title: string;
+                  body: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'vision';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * The six featured programmes (cards) — the one place cards belong. Which courses appear is set per course (featured flag).
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'programmes';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Intellectual refutations highlight. Renders nothing until the clarifications module exists (REQ-HOME-05).
+             */
+            heading: string;
+            /**
+             * Draft copy for when the module is ready.
+             */
+            description?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'refutations';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Latest notices with plain category tabs.
+             */
+            heading: string;
+            /**
+             * How many notices per tab.
+             */
+            limit?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'notices';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Campus life as a ruled two-column list.
+             */
+            heading: string;
+            /**
+             * The document marks photo slots; upload them per item when photos arrive (GAP-C6).
+             */
+            items?:
+              | {
+                  title: string;
+                  body: string;
+                  image?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'campusLife';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Latest articles, videos, gallery. Renders nothing until the media modules exist (REQ-HOME-08).
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaHub';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Featured leadership and faculty. Which people appear is set per person (featured on home flag).
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'people';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * A single calm band leading to the donation page.
+             */
+            heading: string;
+            /**
+             * One or two lines of context (the Zakat Fund scholarship line works well).
+             */
+            body?: string | null;
+            ctaLabel?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'support';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Quick ask box and fatwa bank entry. Renders nothing until the fatwa module exists (REQ-HOME-11).
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'fatwa';
+          }
+      )[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
@@ -2253,6 +2876,130 @@ export interface ImpactStatsSelect<T extends boolean = true> {
         value?: T;
         suffix?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  sections?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              tagline?: T;
+              videoUrl?: T;
+              posterImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        impactStats?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        vision?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              statement?: T;
+              pillars?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        programmes?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        refutations?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              description?: T;
+              id?: T;
+              blockName?: T;
+            };
+        notices?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
+        campusLife?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        mediaHub?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        people?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        support?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              body?: T;
+              ctaLabel?: T;
+              id?: T;
+              blockName?: T;
+            };
+        fatwa?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

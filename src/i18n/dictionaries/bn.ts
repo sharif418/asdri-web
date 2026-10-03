@@ -30,6 +30,8 @@ const bn = {
     comingSoon: 'এই পাতাটি তৈরি হচ্ছে',
     comingSoonBody:
       'ইনস্টিটিউটের ওয়েবসাইটের এই অংশটি শিগগিরই প্রকাশ হবে। এখন কোর্স ও যোগাযোগের তথ্য নিচে পাওয়া যাবে।',
+    introVideo: 'পরিচিতিমূলক ভিডিও',
+    viewNoticeBoard: 'নোটিশ বোর্ড দেখুন',
   },
   people: {
     leadershipTitle: 'নেতৃত্ব ও প্রশাসন',
@@ -64,6 +66,8 @@ const bn = {
       faculty: 'শিক্ষক',
       staff: 'স্টাফ',
       author: 'লেখক',
+    },
+  },
   courses: {
     indexTitle: 'কোর্সসমূহ',
     longHeading: 'দীর্ঘমেয়াদী কোর্সসমূহ',
@@ -114,6 +118,7 @@ const bn = {
       hours: 'ঘণ্টা',
       outcome: 'ফলাফল',
     },
+  },
   notices: {
     boardTitle: 'নোটিশ বোর্ড',
     allCategories: 'সব',

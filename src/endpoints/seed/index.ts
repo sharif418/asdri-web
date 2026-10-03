@@ -6,6 +6,7 @@ import { seedCourses } from './courses'
 import { siteSettingsSeed } from './site-settings'
 import { impactStatsSeed } from './impact-stats'
 import { seedNotices } from './notices'
+import { homeSeed } from './home'
 
 /**
  * Starter content for the institute (ADR-0002): site settings, navigation and impact figures in
@@ -30,8 +31,9 @@ export const seed = async ({
   await seedPeople(payload, req, peopleSeed)
   await seedCourses(payload, req)
   await seedNotices(payload, req)
+  await seedGlobal(payload, req, 'home', homeSeed.bn, homeSeed.en)
 
-  payload.logger.info('Seeded globals, people, courses and sample notices (bn + en).')
+  payload.logger.info('Seeded globals, home, people, courses and sample notices (bn + en).')
 }
 
 type Row = Record<string, unknown>
@@ -39,7 +41,7 @@ type Row = Record<string, unknown>
 async function seedGlobal(
   payload: Payload,
   req: PayloadRequest,
-  slug: 'site-settings' | 'navigation' | 'impact-stats',
+  slug: 'site-settings' | 'navigation' | 'impact-stats' | 'home',
   bn: Row,
   en: Row,
 ) {
