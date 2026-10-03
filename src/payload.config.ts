@@ -14,6 +14,7 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -66,6 +67,9 @@ export default buildConfig({
     push: process.env.PAYLOAD_DB_PUSH
       ? process.env.PAYLOAD_DB_PUSH === 'true'
       : process.env.NODE_ENV !== 'production',
+    // Pending migrations in src/migrations run automatically when the production app starts,
+    // so a Coolify deploy needs no separate migrate step. CI runs `bun run migrate` explicitly.
+    prodMigrations: migrations,
   }),
   // Bangla-first site with English as the second locale (REQ-GEN-01).
   localization: {

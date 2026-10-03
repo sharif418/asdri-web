@@ -17,7 +17,7 @@ Everything the client has not yet decided is built as a **feature-flagged module
 ## Stack (see [ADR-0001](docs/adr/0001-stack.md))
 
 - **Next.js 15** (App Router, RSC, SSR for SEO) + **Payload CMS 3** running inside the same Next app
-- **PostgreSQL 16** (Payload DB adapter), **MinIO / S3** for media & PDFs
+- **PostgreSQL 16** (Payload DB adapter), **S3-compatible object storage** (RustFS self-hosted, swappable) for media & PDFs
 - **Tailwind CSS v4** + a bespoke design system (see [docs/05-design-direction.md](docs/05-design-direction.md)); no stock template look
 - **Docker** + **Coolify** on the team VPS ([infra/](infra/))
 - Package manager: **bun**
@@ -26,8 +26,9 @@ Everything the client has not yet decided is built as a **feature-flagged module
 
 ```bash
 bun install
-cp .env.example .env            # fill DATABASE_URI, PAYLOAD_SECRET, S3 vars
-docker compose -f infra/docker-compose.dev.yml up -d   # postgres + minio locally
+cp .env.example .env            # fill DATABASE_URL, PAYLOAD_SECRET, S3 vars
+docker compose -f infra/docker-compose.dev.yml up -d   # postgres + s3 (RustFS) locally
+bun run s3:init                 # create the media bucket
 bun run dev                     # http://localhost:3000  (admin: /admin)
 ```
 

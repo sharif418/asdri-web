@@ -69,4 +69,4 @@ Admin at `/admin`. Seed demo content with `bun run seed` once the seed script ex
 
 ## 7. Deployment
 
-Coolify on the team VPS. `infra/docker-compose.coolify.yml` is the deployed stack (app + postgres + minio). Each merge to `main` deploys to staging; production is a manual promote. See `infra/README.md`.
+Coolify on the team VPS. `infra/docker-compose.coolify.yml` is the deployed stack (app + postgres + s3). Each merge to `main` deploys to staging; production is a manual promote. See `infra/README.md`.

@@ -1,15 +1,24 @@
+# Coolify "Docker Compose" resource. Set every variable from .env.example in the Coolify UI.
+# Object storage is S3-compatible (RustFS by default; see docs/adr/0004-object-storage.md).
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+        PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+        NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
     restart: unless-stopped
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
       NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
-      S3_ENDPOINT: http://minio:9000
+      PREVIEW_SECRET: ${PREVIEW_SECRET}
+      CRON_SECRET: ${CRON_SECRET}
+      S3_ENDPOINT: http://s3:9000
       S3_PUBLIC_URL: ${S3_PUBLIC_URL}
       S3_BUCKET: ${S3_BUCKET}
       S3_ACCESS_KEY: ${S3_ACCESS_KEY}
@@ -20,11 +29,10 @@ services:
       SMTP_USER: ${SMTP_USER}
       SMTP_PASS: ${SMTP_PASS}
       MAIL_FROM: ${MAIL_FROM}
-      CRON_SECRET: ${CRON_SECRET}
     depends_on:
       postgres:
         condition: service_healthy
-      minio:
+      s3:
         condition: service_started
     ports:
       - '3000'
@@ -49,19 +57,21 @@ services:
       timeout: 5s
       retries: 10
 
-  minio:
-    image: minio/minio:latest
+  s3:
+    image: rustfs/rustfs:latest
     restart: unless-stopped
-    command: server /data --console-address ':9001'
     environment:
-      MINIO_ROOT_USER: ${S3_ACCESS_KEY}
-      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY}
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_KEY}
+      RUSTFS_VOLUMES: /data
+      RUSTFS_ADDRESS: ':9000'
+      RUSTFS_CONSOLE_ENABLE: 'true'
     volumes:
-      - minio-data:/data
+      - s3-data:/data
     ports:
-      - '9000'
-      - '9001'
+      - '9000' # expose on a subdomain (files.<domain>) in Coolify; S3_PUBLIC_URL points there
+      - '9001' # console; keep private or behind Coolify auth
 
 volumes:
   pg-data:
-  minio-data:
+  s3-data:

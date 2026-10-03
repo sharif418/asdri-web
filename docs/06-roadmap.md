@@ -5,7 +5,7 @@ Phases are scoped so each ends with something the client can click on. Durations
 ## Phase 0 — Foundation (week 1–2, in parallel with phase 1 start)
 
 - [x] Requirements extracted with IDs, gap register, data model, design direction (this repo)
-- [ ] Repo scaffold: Next.js 15 + Payload 3 + Postgres + MinIO, Docker, CI, Coolify staging
+- [ ] Repo scaffold: Next.js 15 + Payload 3 + Postgres + S3 storage, Docker, CI, Coolify staging
 - [ ] Design tokens + type specimen page approved
 - [ ] Client decisions requested: GAP-B1 gateway, GAP-B3 domain, GAP-B4 brand/logo
 
@@ -30,4 +30,4 @@ Student portal (profile, records, notices), alumni registration and directory, s
 
 ## Always-on
 
-Performance budget, accessibility checks, backups (Postgres + MinIO), uptime monitoring, security updates.
+Performance budget, accessibility checks, backups (Postgres + S3 bucket), uptime monitoring, security updates.

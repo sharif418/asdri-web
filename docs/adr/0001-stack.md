@@ -14,7 +14,7 @@ The site is content-heavy (courses, notices, journals, fatwa, blog, gallery) *an
 
 ## Decision
 
-Option 3. Payload 3 with `@payloadcms/db-postgres`, `@payloadcms/storage-s3` (MinIO), Lexical rich text, SEO + redirects + search + form-builder plugins, Tailwind v4 with a bespoke token set. Package manager bun. Deployed as one container plus Postgres and MinIO on Coolify.
+Option 3. Payload 3 with `@payloadcms/db-postgres`, `@payloadcms/storage-s3` (any S3-compatible server; see ADR-0004), Lexical rich text, SEO + redirects + search + form-builder plugins, Tailwind v4 with a bespoke token set. Package manager bun. Deployed as one container plus Postgres and an S3-compatible store on Coolify.
 
 ## Consequences
 
