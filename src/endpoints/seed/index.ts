@@ -3,6 +3,7 @@ import type { Payload, PayloadRequest } from 'payload'
 import { navigationSeed } from './navigation'
 import { siteSettingsSeed } from './site-settings'
 import { impactStatsSeed } from './impact-stats'
+import { seedNotices } from './notices'
 
 /**
  * Starter content for the institute (ADR-0002): site settings, navigation and impact figures in
@@ -24,8 +25,9 @@ export const seed = async ({
   await seedGlobal(payload, req, 'site-settings', siteSettingsSeed.bn, siteSettingsSeed.en)
   await seedGlobal(payload, req, 'navigation', navigationSeed.bn, navigationSeed.en)
   await seedGlobal(payload, req, 'impact-stats', impactStatsSeed.bn, impactStatsSeed.en)
+  await seedNotices(payload, req)
 
-  payload.logger.info('Seeded site-settings, navigation and impact-stats (bn + en).')
+  payload.logger.info('Seeded site globals and sample notices (bn + en).')
 }
 
 type Row = Record<string, unknown>
@@ -55,7 +57,7 @@ async function seedGlobal(
 }
 
 /** Copy array row ids from `source` into `target` by position, recursively. */
-function mergeIds(target: unknown, source: unknown): unknown {
+export function mergeIds(target: unknown, source: unknown): unknown {
   if (Array.isArray(target) && Array.isArray(source)) {
     return target.map((row, i) => mergeIds(row, source[i]))
   }

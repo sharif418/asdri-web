@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
+import { Notices } from './collections/Notices'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
@@ -81,7 +82,7 @@ export default buildConfig({
     defaultLocale: 'bn',
     fallback: true,
   },
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Notices, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [SiteSettings, Navigation, ImpactStats],
   plugins,

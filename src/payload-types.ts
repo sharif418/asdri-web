@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    notices: Notice;
     media: Media;
     categories: Category;
     users: User;
@@ -91,6 +92,7 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    notices: NoticesSelect<false> | NoticesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -294,7 +296,6 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
-  _objectKey?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -777,6 +778,80 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * The notice board. Statuses (নতুন / আবেদন চলছে / আবেদন শেষ) are computed from the dates and can be overridden per notice. The notices installed by the seed are SAMPLES written to show the board, filters and badges — replace them with the office’s real announcements.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notices".
+ */
+export interface Notice {
+  id: number;
+  title: string;
+  category: 'admission' | 'recruitment' | 'academic' | 'general';
+  /**
+   * The notice itself. Keep it short; details belong in the attached PDF.
+   */
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Shown on the board and the notice page.
+   */
+  publishedAt?: string | null;
+  /**
+   * Start of the application/active window, if any.
+   */
+  activeFrom?: string | null;
+  /**
+   * End of the window; after this the notice shows আবেদন শেষ.
+   */
+  activeUntil?: string | null;
+  /**
+   * Leave empty to let the site compute the status from the dates. Set only when the office needs to force a badge.
+   */
+  statusOverride?: ('new' | 'active' | 'closed') | null;
+  /**
+   * The notice PDF (or doc) readers download. One-click download on the notice page.
+   */
+  attachments?:
+    | {
+        file: number | Media;
+        /**
+         * Optional download label, e.g. বিজ্ঞপ্তি (PDF)
+         */
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * “অনলাইন ফরম পূরণ করুন” target for admission and recruitment notices. Full URL for external forms (Google Forms etc.), or a site path.
+   */
+  applyLink?: string | null;
+  /**
+   * Pin to the top of the board.
+   */
+  pinned?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
@@ -973,6 +1048,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'notices';
+        value: number | Notice;
       } | null)
     | ({
         relationTo: 'media';
@@ -1216,12 +1295,38 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notices_select".
+ */
+export interface NoticesSelect<T extends boolean = true> {
+  title?: T;
+  category?: T;
+  body?: T;
+  publishedAt?: T;
+  activeFrom?: T;
+  activeUntil?: T;
+  statusOverride?: T;
+  attachments?:
+    | T
+    | {
+        file?: T;
+        label?: T;
+        id?: T;
+      };
+  applyLink?: T;
+  pinned?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
-  _objectKey?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
