@@ -17,6 +17,15 @@ Then `bun run dev` from the repo root. RustFS console at http://localhost:9001, 
   local DB and commit the generated files in `src/migrations/`.
 - CI and production: `bun run migrate` applies pending migrations; the app also runs
   `prodMigrations` on startup, so a Coolify deploy needs no extra step.
+- Applying migrations to a **dev** database that has been pushed to: Payload records a `dev`
+  marker row in `payload_migrations` and `migrate` then asks an interactive question. Either
+  answer it in a terminal, or remove the marker first:
+  `docker compose -f infra/docker-compose.dev.yml exec postgres psql -U postgres -d asdri -c "delete from payload_migrations where name='dev'"`.
+- `migrate:create` prompts (interactively) when one run both drops and creates tables or enums
+  of the same kind ("created or renamed?"). Avoid the prompt by splitting such a change into two
+  migrations: first remove, then add (see the two `site_shell` migrations for an example).
+- Starter content: `bun run seed` writes site settings, navigation and impact stats in bn + en.
+  It is idempotent and never touches collections.
 
 ## Coolify (staging / production)
 

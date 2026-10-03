@@ -7,7 +7,7 @@ import './index.scss'
 
 const SuccessMessage: React.FC = () => (
   <div>
-    Database seeded! You can now{' '}
+    Starter content loaded. You can now{' '}
     <a target="_blank" href="/">
       visit your website
     </a>
