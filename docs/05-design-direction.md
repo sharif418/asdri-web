@@ -18,13 +18,35 @@ An institute that answers modern intellectual challenges from classical knowledg
 
 Build from a restrained palette, defined as CSS tokens on `:root` with dark-mode variants:
 
-- **Primary:** deep green (institutional, Islamic connotation without cliché) e.g. oklch(0.35 0.08 160).
-- **Accent:** warm gold/ochre used sparingly (CTAs, highlights, rules).
-- **Neutrals:** warm paper-like off-white backgrounds, ink-dark text (not pure black).
-- **Semantic:** success/warn/error + notice-badge colours (New = accent, Active = green, Closed = neutral).
+- **Primary:** deep green (institutional, Islamic connotation without cliché) e.g. oklch(0.36 0.07 165).
+- **Accent:** gold used as *illumination* (tazhib): one element per screen at most, never as a general highlight colour.
+- **Neutrals:** cool white/stone backgrounds and a green-black ink for text. Do **not** use the warm cream (#F4F1EA-like) + terracotta pairing; it is the most recognisable generated-page palette.
+- **Semantic:** success/warn/error + notice-badge colours (New = gold, Active = green, Closed = neutral).
 - Contrast AA minimum everywhere, AAA for body text.
 
 No gradients-on-everything, no glassmorphism, no neon.
+
+## 3a. Generated-page tells to avoid (calibration from the frontend-design skill)
+
+These read as AI defaults regardless of subject. Do not use them unless the content genuinely calls for it:
+
+- Tracked-out ALL-CAPS "eyebrow" labels above headings. Use a plain sentence-case label only when it carries information (a category, a date), never as decoration.
+- Meta strings joined with middle dots (`A · B · C`) and labels shaped `WORD — fragment`.
+- A `→` appended to every link or button.
+- Accenting one word of a headline in another colour or italic.
+- Identical rounded cards with the same soft shadow for every content type; one border-radius everywhere.
+- Numbered markers (01 / 02 / 03) on content that is not a sequence. The admission process *is* a sequence; the vision pillars are not.
+- Fade-and-slide-up entrance on every section; hover lift on every card. One orchestrated moment per page at most.
+- Near-black (#0B0B0B) as "black", monospace for small data labels, a cream background with a serif display and a clay accent.
+
+## 3b. The ASDRI visual idea: matn and hashiya
+
+Classical Islamic scholarship is laid out as a main text (matn) with commentary in the margins (hashiya). The institute's whole purpose is to train people who read that way and answer the modern world from it. We use this as the site's structural device, not as ornament:
+
+- Reading pages (course, fatwa, article) have a main column and a **margin column** that carries the structural information: course code and credits, mufti and date, section numbers, related items. On mobile the margin folds above the text as a compact header block.
+- Dividers and rules are the hairlines of a ruled manuscript page: thin, ink-coloured, used to separate real units (semesters, questions), never to decorate.
+- The one bold element per screen is typographic: a large Bangla serif headline set with care. Everything else stays quiet.
+- Gold appears once per screen as illumination (a rule under the headline, a seal mark, a badge) and nowhere else.
 
 ## 4. Layout and motion
 
@@ -50,7 +72,9 @@ No gradients-on-everything, no glassmorphism, no neon.
 
 ## 7. Process
 
+0. Before any UI work, load the `frontend-design` skill and the Design plugin. Work in two passes as that skill prescribes: write a compact design plan (palette, type roles, layout concept, principles), check it against §3a, then build.
 1. Design tokens and type specimen page first (`/design` route, not in nav) — approve before building pages.
+1a. Every UI deliverable passes two gates before merge: `design-critique` (structured critique) and `accessibility-review` (WCAG 2.1 AA). Findings are fixed, not waived.
 2. Build home, course, notice, fatwa, donate as reference screens; review on real phones.
 3. Every PR with UI attaches mobile and desktop screenshots.
 4. A page that "looks generic" is a blocking review comment, equal to a bug.
