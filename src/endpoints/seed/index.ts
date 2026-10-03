@@ -5,6 +5,7 @@ import { peopleSeed, seedPeople } from './people'
 import { seedCourses } from './courses'
 import { siteSettingsSeed } from './site-settings'
 import { impactStatsSeed } from './impact-stats'
+import { seedNotices } from './notices'
 
 /**
  * Starter content for the institute (ADR-0002): site settings, navigation and impact figures in
@@ -26,15 +27,11 @@ export const seed = async ({
   await seedGlobal(payload, req, 'site-settings', siteSettingsSeed.bn, siteSettingsSeed.en)
   await seedGlobal(payload, req, 'navigation', navigationSeed.bn, navigationSeed.en)
   await seedGlobal(payload, req, 'impact-stats', impactStatsSeed.bn, impactStatsSeed.en)
-<<<<<<< HEAD
   await seedPeople(payload, req, peopleSeed)
-
-  payload.logger.info('Seeded site-settings, navigation, impact-stats and people (bn + en).')
-=======
   await seedCourses(payload, req)
+  await seedNotices(payload, req)
 
-  payload.logger.info('Seeded site globals and courses (bn + en).')
->>>>>>> feat/courses
+  payload.logger.info('Seeded globals, people, courses and sample notices (bn + en).')
 }
 
 type Row = Record<string, unknown>
