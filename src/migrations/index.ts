@@ -2,6 +2,7 @@ import * as migration_20261003_122837_initial from './20261003_122837_initial';
 import * as migration_20261003_134123_drop_template_header_footer from './20261003_134123_drop_template_header_footer';
 import * as migration_20261003_134128_site_shell_globals from './20261003_134128_site_shell_globals';
 import * as migration_20261003_153157_people_collection from './20261003_153157_people_collection';
+import * as migration_20261003_163402_courses_collection from './20261003_163402_courses_collection';
 
 export const migrations = [
   {
@@ -22,6 +23,11 @@ export const migrations = [
   {
     up: migration_20261003_153157_people_collection.up,
     down: migration_20261003_153157_people_collection.down,
-    name: '20261003_153157_people_collection'
+    name: '20261003_153157_people_collection',
+  },
+  {
+    up: migration_20261003_163402_courses_collection.up,
+    down: migration_20261003_163402_courses_collection.down,
+    name: '20261003_163402_courses_collection',
   },
 ];
