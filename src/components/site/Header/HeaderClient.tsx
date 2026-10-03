@@ -169,13 +169,38 @@ export function HeaderClient({
   )
 }
 
+const PANEL_WIDTH = 368 // 23rem, matches the Content width below
+
 function DesktopNav({ items }: { items: NavItem[] }) {
   const pathname = usePathname()
   const isActive = (href: string) =>
     href !== '/' && href !== '/en' && Boolean(pathname?.startsWith(href))
 
+  // The open panel sits under its own trigger (not centred under the whole bar): track the open
+  // item and measure its trigger against the root, clamped so the panel stays inside the bar.
+  const rootRef = React.useRef<HTMLElement>(null)
+  const triggerRefs = React.useRef<Record<string, HTMLButtonElement | null>>({})
+  const [value, setValue] = React.useState('')
+  const [panelLeft, setPanelLeft] = React.useState(0)
+
+  React.useLayoutEffect(() => {
+    const trigger = value ? triggerRefs.current[value] : null
+    const root = rootRef.current
+    if (!trigger || !root) return
+    const rootRect = root.getBoundingClientRect()
+    const rect = trigger.getBoundingClientRect()
+    const max = Math.max(0, rootRect.width - PANEL_WIDTH)
+    setPanelLeft(Math.min(Math.max(0, rect.left - rootRect.left), max))
+  }, [value])
+
   return (
-    <NavigationMenu.Root className="relative" aria-label="Primary">
+    <NavigationMenu.Root
+      ref={rootRef}
+      value={value}
+      onValueChange={setValue}
+      className="relative"
+      aria-label="Primary"
+    >
       <div className="scrollbar-none -mx-2.5 overflow-x-auto xl:-mx-3">
         <NavigationMenu.List className="flex h-12 w-max min-w-full items-stretch">
           {items.map((item) => {
@@ -188,10 +213,13 @@ function DesktopNav({ items }: { items: NavItem[] }) {
               activeGroup && 'text-primary after:opacity-100',
             )
             return (
-              <NavigationMenu.Item key={item.href} className="relative">
+              <NavigationMenu.Item key={item.href} value={item.href} className="relative">
                 {hasChildren ? (
                   <>
                     <NavigationMenu.Trigger
+                      ref={(el) => {
+                        triggerRefs.current[item.href] = el
+                      }}
                       className={cn(triggerClass, 'group data-[state=open]:text-primary')}
                     >
                       {item.label}
@@ -240,7 +268,7 @@ function DesktopNav({ items }: { items: NavItem[] }) {
         </NavigationMenu.List>
       </div>
       {/* The open panel lives here, outside the scrollable list, left-aligned under the bar. */}
-      <div className="absolute left-0 top-full z-50 flex justify-start">
+      <div className="absolute top-full z-50 flex justify-start" style={{ left: panelLeft }}>
         <NavigationMenu.Viewport className="relative mt-0 h-[var(--radix-navigation-menu-viewport-height)] w-[var(--radix-navigation-menu-viewport-width)] origin-top-left overflow-hidden rounded-b-md border border-t-0 border-border bg-card shadow-[0_12px_28px_-16px_rgba(15,41,32,0.35)] transition-[width,height] duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
       </div>
     </NavigationMenu.Root>
