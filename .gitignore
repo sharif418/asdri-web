@@ -28,3 +28,4 @@ node_modules/
 # Payload generated import map is committed; types are committed too.
 # Scratch
 *.log
+tsconfig.tsbuildinfo
