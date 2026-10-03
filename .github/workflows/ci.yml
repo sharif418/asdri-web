@@ -28,6 +28,7 @@ jobs:
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/asdri
       PAYLOAD_SECRET: ci-only-secret-not-for-production
+      PAYLOAD_DB_PUSH: 'true'
       NEXT_PUBLIC_SERVER_URL: http://localhost:3000
       NEXT_TELEMETRY_DISABLED: '1'
     steps:

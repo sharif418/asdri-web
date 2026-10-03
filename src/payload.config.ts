@@ -61,8 +61,11 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL,
     },
-    // Dev: push schema changes automatically. Prod: run `bun run migrate` (see infra/README.md).
-    push: process.env.NODE_ENV !== 'production',
+    // Schema sync: dev pushes automatically; production runs `bun run migrate` (infra/README.md).
+    // PAYLOAD_DB_PUSH=true forces push (used by CI, which builds against an empty database).
+    push: process.env.PAYLOAD_DB_PUSH
+      ? process.env.PAYLOAD_DB_PUSH === 'true'
+      : process.env.NODE_ENV !== 'production',
   }),
   // Bangla-first site with English as the second locale (REQ-GEN-01).
   localization: {
