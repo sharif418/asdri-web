@@ -45,7 +45,7 @@ export const seed = async ({
   await seedDownloads(payload, req)
 
   payload.logger.info(
-    'Seeded globals, people, courses, notices, alumni batches, FAQ samples and download samples (bn + en).',
+    'Seeded site-settings, navigation, impact-stats, home, people, courses, sample notices, alumni batches, FAQ samples and download samples (bn + en).',
   )
 }
 

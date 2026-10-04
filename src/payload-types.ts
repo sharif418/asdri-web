@@ -2763,7 +2763,7 @@ export interface Home {
         | {
             enabled?: boolean | null;
             /**
-             * e.g. মূল লক্ষ্য (Vision)
+             * e.g. মূল লক্ষ্য (bn) / Vision (en)
              */
             heading: string;
             /**
@@ -2771,7 +2771,7 @@ export interface Home {
              */
             statement: string;
             /**
-             * Three pillars under the statement. Empty in Bangla until the office provides translations.
+             * Three pillars under the statement. English is the client’s own; the Bangla drafts are translated from it for the office to confirm or replace.
              */
             pillars?:
               | {

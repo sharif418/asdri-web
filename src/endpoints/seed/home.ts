@@ -7,10 +7,13 @@
  * Composed headings flagged for the office (the documents give them only in English):
  *  - notices heading "সাম্প্রতিক বিজ্ঞপ্তি" (the document's section is simply বিজ্ঞপ্তি)
  *  - people heading "নেতৃত্ব ও শিক্ষকমণ্ডলী"
- * The three pillars exist in the client's English document only; Bangla is left empty for the
- * office to provide, and the section renders without them in the meantime. The intro video and
- * campus photos do not exist yet (GAP-C6); the hero stays typographic and the campus list
- * carries no images until they arrive.
+ * Bangla headings the client's mixed-language document printed in English are seeded in
+ * Bangla on the bn side ("মূল লক্ষ্য", "ক্যাম্পাস জীবন"); the client's own English forms stay in
+ * the en locale (review item 9 — the office can change either in the home global).
+ * The Bangla pillar drafts below are translated from the client's English pillars and are
+ * marked as drafts in the PR — the office reviews and replaces them (review item 10). The
+ * intro video and campus photos do not exist yet (GAP-C6); the hero stays typographic and
+ * the campus list carries no images until they arrive.
  */
 export const homeSeed = {
   bn: {
@@ -30,10 +33,25 @@ export const homeSeed = {
       {
         blockType: 'vision',
         enabled: true,
-        heading: 'মূল লক্ষ্য (Vision)',
+        heading: 'মূল লক্ষ্য',
         statement:
           'সমকালীন চিন্তাগত বিভ্রান্তি ও সামাজিক ফিতনাসমূহের মোকাবিলায় চিন্তাশীল, জ্ঞানসমৃদ্ধ ও কার্যকর দাওয়াহকর্মী ও গবেষক তৈরি করা। পাশাপাশি ইসলামের বিরুদ্ধে উত্থাপিত বিভিন্ন প্রশ্ন, আপত্তি ও অভিযোগের গবেষণালব্ধ ও যুক্তিনির্ভর জবাব প্রদান করে বুদ্ধিবৃত্তিক দাওয়াহকে শক্তিশালী করতে কাজ করে যাওয়া।',
-        pillars: [],
+        // BN draft from the client's English pillars (review item 10) — the office confirms or
+        // replaces these three; the EN versions are the client's own words.
+        pillars: [
+          {
+            title: 'কুরআন-সুন্নাহভিত্তিক বুদ্ধিবৃত্তিক দাওয়াহ',
+            body: 'ওহী ও শুদ্ধ ইলমের ওপর প্রতিষ্ঠিত দাওয়াহ, যা চিন্তার জগতে পৌঁছে দেওয়া হয়।',
+          },
+          {
+            title: 'ঐতিহ্যবাহী ইসলামি জ্ঞান ও আধুনিক শাস্ত্রের সেতুবন্ধন',
+            body: 'মনোবিজ্ঞান, দর্শন, মিডিয়াসহ অন্যান্য আধুনিক শাস্ত্র ক্লাসিক্যাল পাঠ্যক্রমের পাশাপাশি পড়ানো হয়।',
+          },
+          {
+            title: 'চরিত্র গঠন, তারবিয়াহ, নেতৃত্ব ও জনসংযোগ',
+            body: 'তারবিয়াহ, নেতৃত্ব এবং সমাজের সাথে প্রকাশ্যে কাজ করার সাহস।',
+          },
+        ],
       },
       {
         blockType: 'programmes',
@@ -55,7 +73,7 @@ export const homeSeed = {
       {
         blockType: 'campusLife',
         enabled: true,
-        heading: 'Campus Life',
+        heading: 'ক্যাম্পাস জীবন',
         intro: 'একটি আদর্শ ইসলামী পরিবেশে শিক্ষার্থীদের মেধা ও মনন বিকাশে আস-সুন্নাহ ইনস্টিটিউটের ক্যাম্পাস লাইফ অত্যন্ত প্রাণবন্ত। আমাদের নিয়মিত কার্যক্রমের মধ্যে রয়েছে:',
         items: [
           {
