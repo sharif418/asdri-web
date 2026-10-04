@@ -28,17 +28,26 @@ export const SiteSettings: GlobalConfig = {
         {
           label: 'Identity',
           fields: [
+            // Payload applies `defaultValue` when it reads a global that was never saved, so a
+            // fresh deployment shows the institute's name in the header, footer and <title>
+            // instead of "undefined" until an admin edits it. Same strings as the seed.
             {
               name: 'name',
               type: 'text',
               required: true,
               localized: true,
+              defaultValue: ({ locale }) =>
+                locale === 'en'
+                  ? 'As-Sunnah Dawah & Research Institute'
+                  : 'আস-সুন্নাহ দাওয়াহ অ্যান্ড রিসার্চ ইনস্টিটিউট',
               admin: { description: 'Full institute name as shown in the header and footer.' },
             },
             {
               name: 'shortName',
               type: 'text',
               localized: true,
+              defaultValue: ({ locale }) =>
+                locale === 'en' ? 'ASDRI' : 'দাওয়াহ অ্যান্ড রিসার্চ ইনস্টিটিউট',
               admin: { description: 'Short form for tight spaces (mobile header, browser tab).' },
             },
             { name: 'tagline', type: 'textarea', localized: true },
@@ -46,6 +55,10 @@ export const SiteSettings: GlobalConfig = {
               name: 'parentLine',
               type: 'text',
               localized: true,
+              defaultValue: ({ locale }) =>
+                locale === 'en'
+                  ? 'An Educational Institution of As-Sunnah Foundation'
+                  : 'আস-সুন্নাহ ফাউন্ডেশনের একটি শিক্ষাপ্রতিষ্ঠান',
               admin: {
                 description:
                   'The Foundation relationship line, e.g. “আস-সুন্নাহ ফাউন্ডেশনের একটি শিক্ষাপ্রতিষ্ঠান”.',
