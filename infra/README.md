@@ -81,8 +81,8 @@ Deploy. Database and bucket live in named volumes and survive redeploys.
 
 - `app` — built from the repo `Dockerfile` (Next.js standalone output, runs Payload migrations on start)
 - `postgres` — PostgreSQL 16 with a named volume
-- `s3` — RustFS, S3-compatible storage with a named volume (ADR-0004); expose port 9000 on a subdomain (e.g. `files.<domain>`) and set `S3_PUBLIC_URL` to it; after first start run `bun run s3:init` once (or create the bucket in the console)
+- `s3` — RustFS, S3-compatible storage with a named volume (ADR-0004); the app creates the bucket on start (`scripts/ensure-bucket.mjs`). Optionally expose port 9000 on a subdomain (e.g. `files.<domain>`) and set `S3_PUBLIC_URL` to it; otherwise files are served through the app
 
-Set every variable from `.env.example` in the Coolify UI. Point the app domain at port 3000. Enable Coolify's automatic backups for the `postgres` volume and schedule a nightly `rclone sync` of the S3 bucket to off-site storage.
+Set every variable from `.env.example` in the Coolify UI. Point the app domain at port 3000. Keep `DATABASE_URL` and `PAYLOAD_SECRET` out of the compose `build.args`: Coolify merges hard-coded build args into the runtime env under the same key (the Dockerfile carries its own build-only placeholders). Enable Coolify's automatic backups for the `postgres` volume and schedule a nightly `rclone sync` of the S3 bucket to off-site storage.
 
 Branch mapping: `main` → staging auto-deploy; production is a second Coolify resource pinned to a release tag.
