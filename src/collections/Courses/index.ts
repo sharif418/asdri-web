@@ -4,6 +4,9 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { slugField } from 'payload'
 import { revalidateCourses, revalidateCoursesDelete } from './hooks/revalidateCourse'
+import { curriculumField } from './fields/curriculum'
+import { formatField } from './fields/format'
+import { sdpField } from './fields/sdp'
 
 /**
  * The institute's programmes (REQ-ACA-01..09) — the hero product of the site. Seven courses from
@@ -55,7 +58,10 @@ export const Courses: CollectionConfig<'courses'> = {
         {
           name: 'arabicTitle',
           type: 'text',
-          admin: { width: '20%', description: 'Arabic name, shown with lang="ar" under the title.' },
+          admin: {
+            width: '20%',
+            description: 'Arabic name, shown with lang="ar" under the title.',
+          },
         },
       ],
     },
@@ -108,7 +114,9 @@ export const Courses: CollectionConfig<'courses'> = {
       name: 'intro',
       type: 'textarea',
       localized: true,
-      admin: { description: 'কোর্স পরিচিতি — the course introduction, verbatim from the client document.' },
+      admin: {
+        description: 'কোর্স পরিচিতি — the course introduction, verbatim from the client document.',
+      },
     },
     {
       name: 'objectives',
@@ -127,67 +135,7 @@ export const Courses: CollectionConfig<'courses'> = {
         },
       ],
     },
-    {
-      name: 'format',
-      type: 'group',
-      label: 'Course format',
-      admin: {
-        description:
-          'কোর্সের ধরন — the summary facts shown in the page margin, plus any further notes from the document as ruled lines.',
-      },
-      fields: [
-        {
-          type: 'row',
-          fields: [
-            {
-              name: 'durationLabel',
-              type: 'text',
-              localized: true,
-              admin: { width: '34%', description: 'e.g. ৩ বছর, ৬ মাস, ১৫ দিন (Bengali digits in Bangla).' },
-            },
-            {
-              name: 'residential',
-              type: 'select',
-              admin: { width: '33%' },
-              defaultValue: 'both',
-              options: [
-                { label: 'Residential', value: 'residential' },
-                { label: 'Non-residential', value: 'nonResidential' },
-                { label: 'Both available', value: 'both' },
-              ],
-            },
-            {
-              name: 'gender',
-              type: 'select',
-              admin: { width: '33%', description: 'Leave empty when the document does not say.' },
-              options: [
-                { label: 'Male only', value: 'male' },
-                { label: 'Female only', value: 'female' },
-                { label: 'All students', value: 'all' },
-              ],
-            },
-          ],
-        },
-        {
-          name: 'bullets',
-          type: 'array',
-          label: 'Format notes',
-          labels: { singular: 'Note', plural: 'Notes' },
-          admin: {
-            components: { RowLabel: '@/components/admin/RowLabel#RowLabel' },
-            description: 'The remaining কোর্সের ধরন lines from the document, verbatim.',
-          },
-          fields: [
-            {
-              name: 'value',
-              type: 'textarea',
-              localized: true,
-              required: true,
-            },
-          ],
-        },
-      ],
-    },
+    formatField,
     {
       name: 'eligibility',
       type: 'array',
@@ -208,7 +156,9 @@ export const Courses: CollectionConfig<'courses'> = {
     {
       name: 'specialisations',
       type: 'group',
-      admin: { description: 'PYS: the five specialisation (takhasus) departments with their Arabic names.' },
+      admin: {
+        description: 'PYS: the five specialisation (takhasus) departments with their Arabic names.',
+      },
       fields: [
         {
           name: 'lead',
@@ -225,7 +175,13 @@ export const Courses: CollectionConfig<'courses'> = {
             {
               type: 'row',
               fields: [
-                { name: 'name', type: 'text', localized: true, required: true, admin: { width: '60%' } },
+                {
+                  name: 'name',
+                  type: 'text',
+                  localized: true,
+                  required: true,
+                  admin: { width: '60%' },
+                },
                 { name: 'arabicName', type: 'text', admin: { width: '40%' } },
               ],
             },
@@ -233,150 +189,23 @@ export const Courses: CollectionConfig<'courses'> = {
         },
       ],
     },
-    {
-      name: 'semesters',
-      type: 'array',
-      label: 'Curriculum',
-      labels: { singular: 'Section', plural: 'Curriculum sections' },
-      admin: {
-        components: { RowLabel: '@/components/admin/RowLabel#RowLabel' },
-        description:
-          'কোর্স কারিকুলাম — one entry per table in the document (semesters, the non-credit supplementary table). Totals are computed from the rows.',
-      },
-      fields: [
-        {
-          type: 'row',
-          fields: [
-            {
-              name: 'title',
-              type: 'text',
-              localized: true,
-              admin: { width: '40%', description: 'e.g. ১ম সেমিস্টার; leave empty when the document prints a single unlabelled table.' },
-            },
-            { name: 'subtitle', type: 'text', localized: true, admin: { width: '40%' }, label: 'Sub-label' },
-            {
-              name: 'durationLabel',
-              type: 'text',
-              localized: true,
-              admin: { width: '20%', description: 'e.g. সময়কাল: ৬ মাস' },
-            },
-          ],
-        },
-        {
-          name: 'note',
-          type: 'textarea',
-          localized: true,
-          admin: { description: 'The explanatory paragraph printed with the table, verbatim.' },
-        },
-        {
-          type: 'row',
-          fields: [
-            {
-              name: 'sourceTotalCredits',
-              type: 'number',
-              admin: {
-                width: '25%',
-                description: 'Credits printed in the document heading (GAP-C2, office reference only; the site computes the total).',
-              },
-            },
-            {
-              name: 'sourceTotalMarks',
-              type: 'number',
-              admin: {
-                width: '25%',
-                description: 'Marks printed in the document heading (GAP-C2, office reference only; the site computes the total).',
-              },
-            },
-            {
-              name: 'sourceTotalHours',
-              type: 'number',
-              admin: {
-                width: '25%',
-                description: 'Hours printed in the document heading (GAP-C2, office reference only; the site computes the total).',
-              },
-            },
-          ],
-        },
-        {
-          name: 'rows',
-          type: 'array',
-          label: 'Rows',
-          labels: { singular: 'Course row', plural: 'Rows' },
-          admin: { components: { RowLabel: '@/components/admin/RowLabel#RowLabel' } },
-          fields: [
-            {
-              type: 'row',
-              fields: [
-                { name: 'code', type: 'text', admin: { width: '20%', description: 'Always Latin digits (GAP-C3).' } },
-                { name: 'title', type: 'text', localized: true, required: true, admin: { width: '55%' } },
-              ],
-            },
-            {
-              name: 'modules',
-              type: 'array',
-              labels: { singular: 'Module', plural: 'Included modules' },
-              admin: { components: { RowLabel: '@/components/admin/RowLabel#RowLabel' } },
-              fields: [
-                { name: 'value', type: 'text', localized: true, required: true },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                { name: 'credits', type: 'number', admin: { width: '34%' } },
-                { name: 'hours', type: 'number', admin: { width: '33%' } },
-                { name: 'marks', type: 'number', admin: { width: '33%' } },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      name: 'sdp',
-      type: 'group',
-      label: 'Student development table',
-      admin: {
-        description:
-          'শিক্ষার্থী উন্নয়ন কার্যক্রম (Student Development Programs) — the PYS non-credit activities table. Also shown on the Student Development page.',
-      },
-      fields: [
-        {
-          name: 'note',
-          type: 'textarea',
-          localized: true,
-          admin: { description: 'The explanatory paragraph printed with the table, verbatim.' },
-        },
-        {
-          name: 'rows',
-          type: 'array',
-          labels: { singular: 'Programme', plural: 'Programmes' },
-          admin: { components: { RowLabel: '@/components/admin/RowLabel#RowLabel' } },
-          fields: [
-            {
-              type: 'row',
-              fields: [
-                { name: 'title', type: 'text', localized: true, required: true, admin: { width: '60%' } },
-                { name: 'hours', type: 'number', admin: { width: '40%' } },
-              ],
-            },
-            { name: 'objective', type: 'text', localized: true },
-            { name: 'activities', type: 'text', localized: true },
-            { name: 'outcome', type: 'text', localized: true },
-          ],
-        },
-      ],
-    },
+    curriculumField,
+    sdpField,
     {
       name: 'topics',
       type: 'group',
-      admin: { description: 'The trainings’ topic lists (Ramadan 25 topics, Arabic and Azan curricula).' },
+      admin: {
+        description: 'The trainings’ topic lists (Ramadan 25 topics, Arabic and Azan curricula).',
+      },
       fields: [
         {
           name: 'label',
           type: 'text',
           localized: true,
-          admin: { width: '100%', description: 'Section heading as printed, e.g. প্রশিক্ষণের বিষয়সমূহ' },
+          admin: {
+            width: '100%',
+            description: 'Section heading as printed, e.g. প্রশিক্ষণের বিষয়সমূহ',
+          },
         },
         {
           name: 'items',
@@ -398,7 +227,10 @@ export const Courses: CollectionConfig<'courses'> = {
       name: 'outcomes',
       type: 'group',
       label: 'What comes after',
-      admin: { description: 'কোর্স সম্পন্নকারীদের পরবর্তী শিক্ষাক্রম ও কর্মপরিকল্পনা — the Diploma’s next-steps section.' },
+      admin: {
+        description:
+          'কোর্স সম্পন্নকারীদের পরবর্তী শিক্ষাক্রম ও কর্মপরিকল্পনা — the Diploma’s next-steps section.',
+      },
       fields: [
         { name: 'intro', type: 'textarea', localized: true },
         {
@@ -417,7 +249,10 @@ export const Courses: CollectionConfig<'courses'> = {
       name: 'featured',
       type: 'checkbox',
       defaultValue: false,
-      admin: { position: 'sidebar', description: 'Show in the six featured programmes on the home page.' },
+      admin: {
+        position: 'sidebar',
+        description: 'Show in the six featured programmes on the home page.',
+      },
     },
     slugField(),
   ],
