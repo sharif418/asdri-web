@@ -33,7 +33,9 @@ export const seed = async ({
   await seedNotices(payload, req)
   await seedGlobal(payload, req, 'home', homeSeed.bn, homeSeed.en)
 
-  payload.logger.info('Seeded globals, home, people, courses and sample notices (bn + en).')
+  payload.logger.info(
+    'Seeded site-settings, navigation, impact-stats, home, people, courses and sample notices (bn + en).',
+  )
 }
 
 type Row = Record<string, unknown>
