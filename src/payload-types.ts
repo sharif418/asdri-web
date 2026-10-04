@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    people: Person;
     courses: Course;
     media: Media;
     categories: Category;
@@ -92,6 +93,7 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    people: PeopleSelect<false> | PeopleSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -778,6 +780,77 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Leadership, teachers and teams. A person appears on the leadership page when "leadership" is ticked, and in the faculty directory when "faculty" is ticked. Photos and biographies are optional; the public pages fall back to a monogram.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people".
+ */
+export interface Person {
+  id: number;
+  /**
+   * Bangla name verbatim from the client document; English transliteration (editable, GAP-C5).
+   */
+  name: string;
+  /**
+   * Optional. A quiet head-and-shoulders photo; a monogram is shown while empty.
+   */
+  photo?: (number | null) | Media;
+  roles: ('leadership' | 'faculty' | 'staff' | 'author')[];
+  /**
+   * e.g. চেয়ারম্যান, উস্তাজ, আরবি শিক্ষক
+   */
+  designation?: string | null;
+  /**
+   * A teacher can belong to more than one team (the source document lists one teacher under both Tajweed and English).
+   */
+  teams?:
+    ('core' | 'arabic' | 'tajweed' | 'tarbiyah' | 'english' | 'bangla' | 'computer' | 'math' | 'science')[] | null;
+  /**
+   * Subjects this person teaches, as listed in the client document.
+   */
+  subjects?:
+    | {
+        subject: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional. The profile page stays complete while empty.
+   */
+  bio?: string | null;
+  /**
+   * Private. Never shown publicly.
+   */
+  email?: string | null;
+  /**
+   * Private. Never shown publicly.
+   */
+  phone?: string | null;
+  social?:
+    | {
+        platform: 'facebook' | 'youtube' | 'x' | 'linkedin' | 'website';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Show in the featured people section on the home page.
+   */
+  featuredOnHome?: boolean | null;
+  /**
+   * Sort order within lists (smaller first).
+   */
+  order?: number | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * Programmes and trainings. Codes follow one scheme (e.g. PYS 1101, CCIS 101, PGD-DIS 1101: prefix, then year+semester, then number — GAP-C3). Semester totals shown on the site are computed from the rows; the totals printed in the client document are kept in the source total fields for reconciliation (GAP-C2).
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1179,6 +1252,10 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'people';
+        value: number | Person;
+      } | null)
+    | ({
         relationTo: 'courses';
         value: number | Course;
       } | null)
@@ -1416,6 +1493,40 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people_select".
+ */
+export interface PeopleSelect<T extends boolean = true> {
+  name?: T;
+  photo?: T;
+  roles?: T;
+  designation?: T;
+  teams?: T;
+  subjects?:
+    | T
+    | {
+        subject?: T;
+        id?: T;
+      };
+  bio?: T;
+  email?: T;
+  phone?: T;
+  social?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  featuredOnHome?: T;
+  order?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
