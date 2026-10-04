@@ -18,8 +18,9 @@ type Props = { params: Promise<{ locale: string }> }
  * Faculty & Teachers directory (REQ-ACA-10): the teacher panel with subjects, then the Arabic,
  * Tajweed and Tarbiyah teachers, then the language, computer, maths and science teams — grouped
  * as the client's document lists them, each person a ruled row with monogram or photo, name,
- * designation and subjects. Teams whose lists have not arrived yet keep their group with a
- * designed empty state (the document lists them as teams without names).
+ * designation and subjects. A named team whose list has not arrived yet keeps its heading with
+ * one quiet line; the catch-all group (অন্যান্য) is a safety net for team-less teachers and
+ * never renders when empty (review item 8).
  */
 export const revalidate = 600
 
@@ -64,6 +65,9 @@ export default async function FacultyDirectoryPage({ params }: Props) {
       ) : (
         <div className="space-y-12">
           {groups.map(({ team, people: teamPeople }) => {
+            // The catch-all group exists only to catch team-less teachers; it is not content
+            // and disappears entirely when empty (review item 8).
+            if (team === OTHER_TEAM && teamPeople.length === 0) return null
             const label = dict.people.teamLabels[team as keyof typeof dict.people.teamLabels]
             return (
               <section key={team} aria-labelledby={`team-${team}`}>
@@ -71,17 +75,9 @@ export default async function FacultyDirectoryPage({ params }: Props) {
                   {label}
                 </h2>
                 {teamPeople.length === 0 ? (
-                  <EmptyState
-                    className="mt-5"
-                    title={dict.people.teamEmptyTitle}
-                    description={dict.people.teamEmptyBody}
-                    action={
-                      <StaffAddAction
-                        href={`/admin/collections/people/create?team=${team === OTHER_TEAM ? '' : team}`}
-                        label={dict.people.addTeacher}
-                      />
-                    }
-                  />
+                  <p className="mt-3 max-w-[68ch] text-body text-ink-muted">
+                    {dict.people.teamPendingLine}
+                  </p>
                 ) : (
                   <ul className="mt-5 divide-y divide-border border-y border-border">
                     {teamPeople.map((person) => (

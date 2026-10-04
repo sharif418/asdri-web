@@ -53,7 +53,8 @@ export const AdmissionsContent: GlobalConfig = {
               maxRows: 8,
               admin: {
                 components: { RowLabel: '@/components/admin/RowLabel#RowLabel' },
-                description: 'Online application, screening, written test, viva, final admission — in order.',
+                description:
+                  'Online application, screening, written test, viva, final admission — in order. Note: the seeded step 3 carries one correction of the source document — "জেনারলেদের" (as printed) → "জেনারেলেদের" (standard spelling); revert it here if the office prefers the document’s own form.',
               },
               fields: [
                 { name: 'title', type: 'text', localized: true, required: true },

@@ -45,8 +45,7 @@ const en: Dictionary = {
       science: 'Basic science',
       other: 'Other',
     },
-    teamEmptyTitle: 'No teachers from this team have been published yet',
-    teamEmptyBody: 'The list will be added soon.',
+    teamPendingLine: 'The list of teachers for this team will be added soon.',
     directoryEmptyTitle: 'No teachers have been published yet',
     directoryEmptyBody:
       'When the list is published, teachers will appear here by team with their names, designations and subjects.',

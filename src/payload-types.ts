@@ -2948,7 +2948,7 @@ export interface AdmissionsContent {
    */
   processIntro?: string | null;
   /**
-   * Online application, screening, written test, viva, final admission — in order.
+   * Online application, screening, written test, viva, final admission — in order. Note: the seeded step 3 carries one correction of the source document — "জেনারলেদের" (as printed) → "জেনারেলেদের" (standard spelling); revert it here if the office prefers the document’s own form.
    */
   steps?:
     | {
