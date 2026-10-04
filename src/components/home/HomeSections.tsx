@@ -96,6 +96,7 @@ export async function HomeSections({
                 prospectusUrl={prospectusUrl}
                 admissionNotice={admissionNotice}
                 admissionNote={settings.admissionNote ?? null}
+                parentLine={settings.parentLine ?? null}
               />
             )
           case 'impactStats':
@@ -137,6 +138,7 @@ export async function HomeSections({
                 block={section}
                 people={featuredPeople.docs as Person[]}
                 locale={locale}
+                dict={dict}
               />
             )
           case 'support':

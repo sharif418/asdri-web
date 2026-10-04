@@ -35,6 +35,9 @@
   --background: oklch(98.2% 0.004 165);
   --foreground: oklch(25% 0.03 168); /* Foundation dark green hue (#0F2920 = 25.7% 0.037 168) */
   --ink-muted: oklch(46% 0.018 168);
+  /* The deepest ground: the footer band, a shade past primary-deep so the two dark bands
+     that end the page (support, footer) never merge into one block. */
+  --ink-deep: oklch(21.5% 0.028 168);
   --card: oklch(100% 0 0);
   --card-foreground: var(--foreground);
   --paper-2: oklch(95.8% 0.006 165); /* Foundation soft band #EEF2F0 */
@@ -48,6 +51,10 @@
   --primary-deep: oklch(31% 0.075 155);
   --primary-foreground: oklch(98% 0.005 160);
   --primary-soft: oklch(93.5% 0.035 153);
+  /* Foreground for bands that stay dark in BOTH themes (support band, footer): unlike
+     --primary-foreground, which flips to dark ink in dark mode (for the lightened primary
+     buttons), this stays paper so dark bands never lose their text. */
+  --band-foreground: oklch(98% 0.005 160);
 
   --accent: oklch(
     68% 0.13 72
@@ -80,6 +87,7 @@
   --background: oklch(19% 0.016 168);
   --foreground: oklch(94% 0.008 165);
   --ink-muted: oklch(72% 0.01 165);
+  --ink-deep: oklch(14.5% 0.016 168);
   --card: oklch(23% 0.016 168);
   --card-foreground: var(--foreground);
   --paper-2: oklch(26% 0.016 168);
@@ -91,6 +99,7 @@
   --primary-deep: oklch(26% 0.05 155);
   --primary-foreground: oklch(17% 0.03 168);
   --primary-soft: oklch(30% 0.05 153);
+  --band-foreground: oklch(94% 0.008 165); /* paper text on bands that stay dark */
 
   --accent: oklch(78% 0.12 75);
   --accent-foreground: oklch(90% 0.06 80);
@@ -142,6 +151,9 @@
   --text-h3--line-height: 1.32;
   --text-h4: 1.2rem;
   --text-h4--line-height: 1.4;
+  /* The statement: a declaration set between heading and reading (vision, support bands). */
+  --text-statement: clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
+  --text-statement--line-height: 1.55;
   --text-body: 1.0625rem;
   --text-body--line-height: 1.75;
   --text-reading: 1.125rem;
@@ -177,6 +189,7 @@
   --color-foreground: var(--foreground);
   --color-ink: var(--foreground);
   --color-ink-muted: var(--ink-muted);
+  --color-ink-deep: var(--ink-deep);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-paper-2: var(--paper-2);
@@ -186,6 +199,7 @@
   --color-primary-deep: var(--primary-deep);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-soft: var(--primary-soft);
+  --color-band-foreground: var(--band-foreground);
   --color-brand-green: var(--brand-green);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
@@ -343,4 +357,13 @@ html {
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
+}
+
+/* Bangla display never tracks negative: the matra (headline stroke) needs its full advance
+   between graphemes — the Latin display's -0.01em pinches Bangla conjuncts. Unlayered so it
+   wins over the text-display utility's theme letter-spacing. */
+:lang(bn) h1,
+:lang(bn) .text-display,
+:lang(bn) .text-statement {
+  letter-spacing: 0;
 }

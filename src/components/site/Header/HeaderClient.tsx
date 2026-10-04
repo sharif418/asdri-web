@@ -49,10 +49,11 @@ const telHref = (phone: string) => `tel:${phone.replace(/[^+\d]/g, '')}`
  * Header shell, three rows on desktop like an institutional masthead:
  *   1. utility bar: contact, language, account links
  *   2. masthead: wordmark with the Foundation line, primary action
- *   3. navigation bar (sticky): eight sections with ruled dropdown panels
+ *   3. navigation bar (sticky): the eight sections with ruled dropdown panels
  * On mobile rows 1 and 3 collapse into a drawer; the masthead row is sticky instead.
- * Eight Bangla labels need room, which is why the nav has its own row rather than squeezing
- * beside the wordmark.
+ * The navigation bar condenses as the page scrolls: once the masthead row has left the screen,
+ * the institute's short name and the primary action reappear inside the stuck bar, so the
+ * reader who is three screens deep in notices is never far from the name or the way to give.
  */
 export function HeaderClient({
   locale,
@@ -67,6 +68,8 @@ export function HeaderClient({
 }: Props) {
   const pathname = usePathname()
   const [open, setOpen] = React.useState(false)
+  const [condensed, setCondensed] = React.useState(false)
+  const navRowRef = React.useRef<HTMLDivElement>(null)
   const loginHref = locale === 'bn' ? '/login' : '/en/login'
 
   // Close the drawer when the route changes (user navigated from inside it).
@@ -74,8 +77,35 @@ export function HeaderClient({
     setOpen(false)
   }, [pathname])
 
+  // The nav bar is sticky at the top; it is "condensed" from the moment it sits there with the
+  // masthead scrolled off. Measured, not scrolled-to assumptions, so a mid-page reload is right.
+  React.useEffect(() => {
+    const el = navRowRef.current
+    if (!el) return
+    let raf = 0
+    const check = () => {
+      raf = 0
+      if (!window.matchMedia('(min-width: 64rem)').matches) {
+        setCondensed(false)
+        return
+      }
+      setCondensed(el.getBoundingClientRect().top <= 1)
+    }
+    const onScrollOrResize = () => {
+      if (!raf) raf = requestAnimationFrame(check)
+    }
+    check()
+    window.addEventListener('scroll', onScrollOrResize, { passive: true })
+    window.addEventListener('resize', onScrollOrResize, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScrollOrResize)
+      window.removeEventListener('resize', onScrollOrResize)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [])
+
   return (
-    <header className="relative z-40">
+    <>
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-50 focus:rounded-sm focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
@@ -83,95 +113,128 @@ export function HeaderClient({
         {skipLabel}
       </a>
 
-      {/* Row 1: utility bar (desktop) */}
-      <div className="hidden border-b border-border bg-paper-2/60 lg:block">
-        <div className="container flex h-9 items-center justify-between text-caption text-ink-muted">
-          <div className="flex items-center gap-5">
-            {contact.phone && (
-              <a
-                href={telHref(contact.phone)}
-                className="inline-flex items-center gap-1.5 hover:text-foreground"
-              >
-                <Phone className="size-3.5" aria-hidden />
-                <span dir="ltr">{contact.phone}</span>
-                {contact.phoneNote && (
-                  <span className="text-ink-muted/80">({contact.phoneNote})</span>
-                )}
-              </a>
-            )}
-            {contact.email && (
-              <a
-                href={`mailto:${contact.email}`}
-                className="inline-flex items-center gap-1.5 hover:text-foreground"
-              >
-                <Mail className="size-3.5" aria-hidden />
-                {contact.email}
-              </a>
-            )}
-          </div>
-          <div className="flex items-center gap-4">
-            <LocaleSwitcher current={locale} label={dict.language} />
-            {utility.map((item) => (
-              <Link key={item.href} href={item.href} className="hover:text-foreground">
-                {item.label}
-              </Link>
-            ))}
-            {showAccounts && (
-              <Link href={loginHref} className="hover:text-foreground">
-                {dict.login}
-              </Link>
-            )}
+      {/* Rows 1–2 inside a header that is itself the mobile sticky bar. Sticky needs a
+          containing block taller than the bar: the header's parent (the page wrapper) is,
+          the header's own box is not — which is why stickiness lives here and not on the
+          inner rows. On desktop the header is static and scrolls away. */}
+      <header className="sticky top-0 z-40 lg:static">
+        {/* Row 1: utility bar (desktop) */}
+        <div className="hidden border-b border-border bg-paper-2/60 lg:block">
+          <div className="container flex h-9 items-center justify-between text-caption text-ink-muted">
+            <div className="flex items-center gap-5">
+              {contact.phone && (
+                <a
+                  href={telHref(contact.phone)}
+                  className="inline-flex items-center gap-1.5 hover:text-foreground"
+                >
+                  <Phone className="size-3.5" aria-hidden />
+                  <span dir="ltr">{contact.phone}</span>
+                  {contact.phoneNote && (
+                    <span className="text-ink-muted/80">({contact.phoneNote})</span>
+                  )}
+                </a>
+              )}
+              {contact.email && (
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="inline-flex items-center gap-1.5 hover:text-foreground"
+                >
+                  <Mail className="size-3.5" aria-hidden />
+                  {contact.email}
+                </a>
+              )}
+            </div>
+            <div className="flex items-center gap-4">
+              <LocaleSwitcher current={locale} label={dict.language} />
+              {utility.map((item) => (
+                <Link key={item.href} href={item.href} className="hover:text-foreground">
+                  {item.label}
+                </Link>
+              ))}
+              {showAccounts && (
+                <Link href={loginHref} className="hover:text-foreground">
+                  {dict.login}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Row 2: masthead. Sticky on mobile (it is the only bar there); static on desktop. */}
-      <div className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85 lg:static lg:border-b-0 lg:bg-background lg:backdrop-blur-none">
-        <div className="container flex h-16 items-center justify-between gap-4 lg:h-24">
-          <Brand
-            name={brand.name}
-            parentLine={brand.parentLine}
-            href={brand.href}
-            logoUrl={brand.logoUrl}
-            logoAlt={brand.logoAlt}
-            className="min-w-0 lg:[&_span]:whitespace-nowrap"
-            parentLineClassName="hidden md:inline-flex"
-          />
-          <div className="flex shrink-0 items-center gap-2">
-            {cta && (
-              <Button asChild size="default" className="hidden sm:inline-flex lg:h-12 lg:px-6">
+        {/* Row 2: masthead — the only bar on mobile, carried by the sticky header above. */}
+        <div className="border-b border-border bg-background lg:border-b-0">
+          <div className="container flex h-16 items-center justify-between gap-4 lg:h-24">
+            <Brand
+              name={brand.name}
+              parentLine={brand.parentLine}
+              href={brand.href}
+              logoUrl={brand.logoUrl}
+              logoAlt={brand.logoAlt}
+              className="min-w-0 lg:[&_span]:whitespace-nowrap"
+              parentLineClassName="hidden md:inline-flex"
+            />
+            <div className="flex shrink-0 items-center gap-2">
+              {cta && (
+                <Button asChild size="default" className="hidden sm:inline-flex lg:h-12 lg:px-6">
+                  <Link href={cta.href}>{cta.label}</Link>
+                </Button>
+              )}
+              <MobileMenu
+                open={open}
+                onOpenChange={setOpen}
+                items={items}
+                utility={utility}
+                cta={cta}
+                contact={contact}
+                locale={locale}
+                showAccounts={showAccounts}
+                dict={dict}
+                brand={brand}
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Row 3: the navigation bar (desktop), sticky. It lives outside the header element on
+          purpose: a sticky element can never leave its containing block, and the header's box
+          ends with the masthead — inside it, this bar would have nowhere to stick (the bug the
+          old layout had, both rows). Here its containing block is the page wrapper, so it holds
+          the top of the screen for the whole page and condenses once the masthead is gone. */}
+      <div
+        ref={navRowRef}
+        className="hidden border-y border-border bg-background lg:sticky lg:top-0 lg:z-40 lg:block"
+      >
+        <div className="container flex items-center gap-3">
+          <div
+            className={cn(
+              'shrink-0 overflow-hidden transition-[max-width,opacity,visibility] duration-200',
+              condensed ? 'visible max-w-72 opacity-100' : 'invisible max-w-0 opacity-0',
+            )}
+          >
+            <Brand name={brand.shortName} href={brand.href} compact />
+          </div>
+          <DesktopNav items={items} className="min-w-0 flex-1" />
+          {cta && (
+            <div
+              className={cn(
+                'shrink-0 overflow-hidden transition-[max-width,opacity,visibility] duration-200',
+                condensed ? 'visible max-w-56 opacity-100' : 'invisible max-w-0 opacity-0',
+              )}
+            >
+              <Button asChild size="sm" className="h-10 px-5">
                 <Link href={cta.href}>{cta.label}</Link>
               </Button>
-            )}
-            <MobileMenu
-              open={open}
-              onOpenChange={setOpen}
-              items={items}
-              utility={utility}
-              cta={cta}
-              contact={contact}
-              locale={locale}
-              showAccounts={showAccounts}
-              dict={dict}
-              brand={brand}
-            />
-          </div>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Row 3: navigation bar (desktop), sticky */}
-      <div className="hidden border-y border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85 lg:sticky lg:top-0 lg:z-40 lg:block">
-        <div className="container">
-          <DesktopNav items={items} />
-        </div>
-      </div>
-    </header>
+    </>
   )
 }
 
 const PANEL_WIDTH = 368 // 23rem, matches the Content width below
 
-function DesktopNav({ items }: { items: NavItem[] }) {
+function DesktopNav({ items, className }: { items: NavItem[]; className?: string }) {
   const pathname = usePathname()
   const isActive = (href: string) =>
     href !== '/' && href !== '/en' && Boolean(pathname?.startsWith(href))
@@ -198,10 +261,10 @@ function DesktopNav({ items }: { items: NavItem[] }) {
       ref={rootRef}
       value={value}
       onValueChange={setValue}
-      className="relative"
+      className={cn('relative', className)}
       aria-label="Primary"
     >
-      <div className="scrollbar-none -mx-2.5 overflow-x-auto xl:-mx-3">
+      <div className="scrollbar-none overflow-x-auto">
         <NavigationMenu.List className="flex h-12 w-max min-w-full items-stretch">
           {items.map((item) => {
             const hasChildren = (item.children?.length ?? 0) > 0
@@ -229,7 +292,23 @@ function DesktopNav({ items }: { items: NavItem[] }) {
                       />
                     </NavigationMenu.Trigger>
                     <NavigationMenu.Content className="w-[23rem] p-2 data-[motion=from-end]:animate-in data-[motion=from-end]:fade-in-0 data-[motion=from-start]:animate-in data-[motion=from-start]:fade-in-0">
+                      {/* The panel is an excerpt of the section: its own page first, then the
+                          children with their descriptions, ruled like the pages they lead to. */}
                       <ul className="divide-y divide-border">
+                        <li>
+                          <NavigationMenu.Link asChild active={isActive(item.href)}>
+                            <Link
+                              href={item.href}
+                              target={item.newTab ? '_blank' : undefined}
+                              rel={item.newTab ? 'noopener noreferrer' : undefined}
+                              className="block px-3 py-2.5 hover:bg-paper-2 data-[active]:text-primary"
+                            >
+                              <span className="block font-serif text-small font-semibold">
+                                {item.label}
+                              </span>
+                            </Link>
+                          </NavigationMenu.Link>
+                        </li>
                         {item.children!.map((child) => (
                           <li key={child.href}>
                             <NavigationMenu.Link asChild active={isActive(child.href)}>
@@ -237,7 +316,7 @@ function DesktopNav({ items }: { items: NavItem[] }) {
                                 href={child.href}
                                 target={child.newTab ? '_blank' : undefined}
                                 rel={child.newTab ? 'noopener noreferrer' : undefined}
-                                className="block rounded-sm px-3 py-2.5 hover:bg-paper-2 data-[active]:text-primary"
+                                className="block px-3 py-2.5 hover:bg-paper-2 data-[active]:text-primary"
                               >
                                 <span className="block text-small font-medium">{child.label}</span>
                                 {child.description && (
@@ -302,8 +381,10 @@ function MobileMenu({
           aria-describedby={undefined}
         >
           <Dialog.Title className="sr-only">{dict.menu}</Dialog.Title>
-          <div className="flex h-16 items-center justify-between border-b border-border px-4">
-            <Brand name={brand.shortName} href={brand.href} compact />
+          {/* The drawer opens on the Foundation line: the short name with the parent
+              organisation beneath, the way the masthead carries it on desktop. */}
+          <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3.5">
+            <Brand name={brand.shortName} parentLine={brand.parentLine} href={brand.href} />
             <Dialog.Close asChild>
               <Button variant="ghost" size="icon" aria-label={dict.closeMenu}>
                 <X className="size-5" aria-hidden />
@@ -339,7 +420,7 @@ function MobileMenu({
                         <li>
                           <Link
                             href={item.href}
-                            className="block py-2 pl-4 text-small text-ink-muted hover:text-primary"
+                            className="block py-2 pl-4 text-small font-medium text-ink-muted hover:text-primary"
                           >
                             {item.label}
                           </Link>

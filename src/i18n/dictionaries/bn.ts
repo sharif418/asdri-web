@@ -37,6 +37,9 @@ const bn = {
     deadline: 'আবেদনের শেষ তারিখ',
     readNotice: 'বিজ্ঞপ্তি পড়ুন',
     allAdmissionNotices: 'সব ভর্তি বিজ্ঞপ্তি',
+    seeAllCourses: 'সব কোর্স',
+    seeAllFaculty: 'সকল শিক্ষক ও গবেষক',
+    flagshipProgramme: 'প্রধান প্রোগ্রাম',
   },
   people: {
     leadershipTitle: 'নেতৃত্ব ও প্রশাসন',

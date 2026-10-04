@@ -12,12 +12,13 @@ type SupportBlock = Extract<NonNullable<Home['sections']>[number], { blockType: 
 
 /**
  * The single calm support band (REQ-HOME-10, phase 1 scope): the dark-green band shared with
- * the Foundation's site, one line about where the money goes, and the button leading to the
- * donation page. No fund grid, no calculator here yet — those belong to the donation module
- * with its own screens. The hero hairline is the home page's single gold (docs/05 §3b); the
- * button here is an outline-on-dark treatment — measured 17.6:1 text and border against the
- * band in rest and hover (review items 2–3; `secondary`'s dark text fails on its hover state
- * over the band, and the green `default` shape blends into the band at 1.15:1).
+ * the Foundation's site. The heading sits small as the band's label and the office's own line —
+ * where the Zakat goes — is raised to the statement scale, so the sentence a donor came to read
+ * is the sentence the band says loudest. The button is an outline-on-dark treatment — measured
+ * 17.6:1 text and border against the band in rest and hover (review items 2–3; `secondary`'s
+ * dark text fails on its hover state over the band, and the green `default` shape blends into
+ * the band at 1.15:1). The hero hairline remains the home page's single gold on light ground;
+ * this band's weight is carried by the green itself.
  */
 export function SupportSection({
   block,
@@ -35,15 +36,15 @@ export function SupportSection({
   if (!donationsEnabled) return null
 
   return (
-    <section className="bg-primary-deep py-14 text-primary-foreground md:py-16">
+    <section className="bg-primary-deep py-16 text-band-foreground md:py-24">
       <div className="container">
-        <div className="grid items-center gap-8 md:grid-cols-12">
+        <div className="grid items-end gap-8 md:grid-cols-12 md:gap-x-10">
           <div className="md:col-span-8">
-            <h2 className="font-serif text-h3 font-semibold text-primary-foreground">
+            <h2 className="font-sans text-caption font-medium text-band-foreground/70">
               {block.heading}
             </h2>
             {block.body && (
-              <p className="mt-3 max-w-[68ch] text-small leading-relaxed text-primary-foreground/85">
+              <p className="mt-5 max-w-[34ch] font-serif text-statement text-band-foreground">
                 {block.body}
               </p>
             )}
@@ -53,7 +54,7 @@ export function SupportSection({
               asChild
               variant="outline"
               size="lg"
-              className="border-primary-foreground/50 text-primary-foreground hover:border-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              className="border-band-foreground/50 text-band-foreground hover:border-band-foreground hover:bg-primary-foreground/10 hover:text-band-foreground"
             >
               <Link href={localizedHref(locale, '/donate')}>{block.ctaLabel || dict.header.donate}</Link>
             </Button>

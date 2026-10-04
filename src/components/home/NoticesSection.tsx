@@ -7,6 +7,7 @@ import type { Dictionary } from '@/i18n/getDictionary'
 import type { Home } from '@/payload-types'
 
 import { NoticeTabs } from './NoticeTabs'
+import { SectionHead } from '@/components/site/SectionHead'
 import { localizedHref } from '@/i18n/config'
 
 type NoticesBlock = Extract<
@@ -18,9 +19,10 @@ type Tab = 'all' | 'admission' | 'academic' | 'recruitment'
 const CATEGORIES: Tab[] = ['all', 'admission', 'academic', 'recruitment']
 
 /**
- * Latest notices on the home (REQ-HOME-06): plain category tabs over ruled rows, with a quiet
- * link to the full board. The lists are fetched once on the server; switching tabs only swaps
- * what is visible.
+ * Latest notices on the home (REQ-HOME-06): the section head carries the board route on its
+ * rule, the category tabs sit beneath, and the notices themselves are ruled rows — the same
+ * row the full board uses, so the home reads as the first page of the board. The lists are
+ * fetched once on the server; switching tabs only swaps what is visible.
  */
 export async function NoticesSection({
   block,
@@ -59,9 +61,13 @@ export async function NoticesSection({
   if (!hasAny) return null
 
   return (
-    <section className="container pb-20">
-      <h2 className="text-h3">{block.heading}</h2>
-      <div className="mt-6">
+    <section className="container py-16 md:py-20" aria-label={block.heading}>
+      <SectionHead
+        heading={block.heading}
+        rule
+        action={{ href: localizedHref(locale, '/notices'), label: dict.home.viewNoticeBoard }}
+      />
+      <div className="mt-8">
         <NoticeTabs
           notices={notices}
           locale={locale}
@@ -74,8 +80,6 @@ export async function NoticesSection({
             statusClosed: dict.notices.statusClosed,
             emptyBody: dict.notices.emptyBody,
           }}
-          boardHref={localizedHref(locale, '/notices')}
-          boardLabel={dict.home.viewNoticeBoard}
         />
       </div>
     </section>
