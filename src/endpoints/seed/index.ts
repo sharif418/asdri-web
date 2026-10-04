@@ -1,6 +1,8 @@
 import type { Payload, PayloadRequest } from 'payload'
 
 import { navigationSeed } from './navigation'
+import { seedCourses } from './courses'
+import { peopleSeed, seedPeople } from './people'
 import { siteSettingsSeed } from './site-settings'
 import { impactStatsSeed } from './impact-stats'
 import { seedNotices } from './notices'
@@ -25,9 +27,13 @@ export const seed = async ({
   await seedGlobal(payload, req, 'site-settings', siteSettingsSeed.bn, siteSettingsSeed.en)
   await seedGlobal(payload, req, 'navigation', navigationSeed.bn, navigationSeed.en)
   await seedGlobal(payload, req, 'impact-stats', impactStatsSeed.bn, impactStatsSeed.en)
+  await seedPeople(payload, req, peopleSeed)
+  await seedCourses(payload, req)
   await seedNotices(payload, req)
 
-  payload.logger.info('Seeded site globals and sample notices (bn + en).')
+  payload.logger.info(
+    'Seeded site-settings, navigation, impact-stats, people, courses and sample notices (bn + en).',
+  )
 }
 
 type Row = Record<string, unknown>

@@ -69,6 +69,8 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    people: Person;
+    courses: Course;
     notices: Notice;
     media: Media;
     categories: Category;
@@ -92,6 +94,8 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    people: PeopleSelect<false> | PeopleSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
     notices: NoticesSelect<false> | NoticesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -778,6 +782,280 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Leadership, teachers and teams. A person appears on the leadership page when "leadership" is ticked, and in the faculty directory when "faculty" is ticked. Photos and biographies are optional; the public pages fall back to a monogram.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people".
+ */
+export interface Person {
+  id: number;
+  /**
+   * Bangla name verbatim from the client document; English transliteration (editable, GAP-C5).
+   */
+  name: string;
+  /**
+   * Optional. A quiet head-and-shoulders photo; a monogram is shown while empty.
+   */
+  photo?: (number | null) | Media;
+  roles: ('leadership' | 'faculty' | 'staff' | 'author')[];
+  /**
+   * e.g. চেয়ারম্যান, উস্তাজ, আরবি শিক্ষক
+   */
+  designation?: string | null;
+  /**
+   * A teacher can belong to more than one team (the source document lists one teacher under both Tajweed and English).
+   */
+  teams?:
+    ('core' | 'arabic' | 'tajweed' | 'tarbiyah' | 'english' | 'bangla' | 'computer' | 'math' | 'science')[] | null;
+  /**
+   * Subjects this person teaches, as listed in the client document.
+   */
+  subjects?:
+    | {
+        subject: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional. The profile page stays complete while empty.
+   */
+  bio?: string | null;
+  /**
+   * Private. Never shown publicly.
+   */
+  email?: string | null;
+  /**
+   * Private. Never shown publicly.
+   */
+  phone?: string | null;
+  social?:
+    | {
+        platform: 'facebook' | 'youtube' | 'x' | 'linkedin' | 'website';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Show in the featured people section on the home page.
+   */
+  featuredOnHome?: boolean | null;
+  /**
+   * Sort order within lists (smaller first).
+   */
+  order?: number | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Programmes and trainings. Codes follow one scheme (e.g. PYS 1101, CCIS 101, PGD-DIS 1101: prefix, then year+semester, then number — GAP-C3). Semester totals shown on the site are computed from the rows; the totals printed in the client document are kept in the source total fields for reconciliation (GAP-C2).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  title: string;
+  /**
+   * Short code, e.g. PYS. Always Latin digits.
+   */
+  shortTitle?: string | null;
+  /**
+   * Arabic name, shown with lang="ar" under the title.
+   */
+  arabicTitle?: string | null;
+  type: 'long' | 'short';
+  /**
+   * active = full course page. draft = announced but without content yet (shows a marked placeholder — GAP-C4). Named listingStatus: "status" collides with the draft system’s _status on the versions table.
+   */
+  listingStatus: 'active' | 'draft';
+  /**
+   * Sort order within the index (smaller first).
+   */
+  order?: number | null;
+  /**
+   * One sentence for index rows and the home programme cards. Bangla is an excerpt from the client document; keep it verbatim.
+   */
+  summary?: string | null;
+  /**
+   * কোর্স পরিচিতি — the course introduction, verbatim from the client document.
+   */
+  intro?: string | null;
+  /**
+   * লক্ষ্য-উদ্দেশ্য। Rendered as a ruled list.
+   */
+  objectives?:
+    | {
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * কোর্সের ধরন — the summary facts shown in the page margin, plus any further notes from the document as ruled lines.
+   */
+  format?: {
+    /**
+     * e.g. ৩ বছর, ৬ মাস, ১৫ দিন (Bengali digits in Bangla).
+     */
+    durationLabel?: string | null;
+    residential?: ('residential' | 'nonResidential' | 'both') | null;
+    /**
+     * Leave empty when the document does not say.
+     */
+    gender?: ('male' | 'female' | 'all') | null;
+    /**
+     * The remaining কোর্সের ধরন lines from the document, verbatim.
+     */
+    bullets?:
+      | {
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * ভর্তির যোগ্যতা / আবেদন যোগ্যতা। Rendered as a ruled list.
+   */
+  eligibility?:
+    | {
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * PYS: the five specialisation (takhasus) departments with their Arabic names.
+   */
+  specialisations?: {
+    /**
+     * Lead-in line as printed, e.g. পাঁচটি তাখাচ্ছুছ বিভাগ যথাক্রমে:
+     */
+    lead?: string | null;
+    items?:
+      | {
+          name: string;
+          arabicName?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * কোর্স কারিকুলাম — one entry per table in the document (semesters, the non-credit supplementary table). Totals are computed from the rows.
+   */
+  semesters?:
+    | {
+        /**
+         * e.g. ১ম সেমিস্টার; leave empty when the document prints a single unlabelled table.
+         */
+        title?: string | null;
+        subtitle?: string | null;
+        /**
+         * e.g. সময়কাল: ৬ মাস
+         */
+        durationLabel?: string | null;
+        /**
+         * The explanatory paragraph printed with the table, verbatim.
+         */
+        note?: string | null;
+        /**
+         * Credits printed in the document heading (GAP-C2, office reference only; the site computes the total).
+         */
+        sourceTotalCredits?: number | null;
+        /**
+         * Marks printed in the document heading (GAP-C2, office reference only; the site computes the total).
+         */
+        sourceTotalMarks?: number | null;
+        /**
+         * Hours printed in the document heading (GAP-C2, office reference only; the site computes the total).
+         */
+        sourceTotalHours?: number | null;
+        rows?:
+          | {
+              /**
+               * Always Latin digits (GAP-C3).
+               */
+              code?: string | null;
+              title: string;
+              modules?:
+                | {
+                    value: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              credits?: number | null;
+              hours?: number | null;
+              marks?: number | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * শিক্ষার্থী উন্নয়ন কার্যক্রম (Student Development Programs) — the PYS non-credit activities table. Also shown on the Student Development page.
+   */
+  sdp?: {
+    /**
+     * The explanatory paragraph printed with the table, verbatim.
+     */
+    note?: string | null;
+    rows?:
+      | {
+          title: string;
+          hours?: number | null;
+          objective?: string | null;
+          activities?: string | null;
+          outcome?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * The trainings’ topic lists (Ramadan 25 topics, Arabic and Azan curricula).
+   */
+  topics?: {
+    /**
+     * Section heading as printed, e.g. প্রশিক্ষণের বিষয়সমূহ
+     */
+    label?: string | null;
+    items?:
+      | {
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * কোর্স সম্পন্নকারীদের পরবর্তী শিক্ষাক্রম ও কর্মপরিকল্পনা — the Diploma’s next-steps section.
+   */
+  outcomes?: {
+    intro?: string | null;
+    items?:
+      | {
+          heading: string;
+          body: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Show in the six featured programmes on the home page.
+   */
+  featured?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * The notice board. Statuses (নতুন / আবেদন চলছে / আবেদন শেষ) are computed from the dates and can be overridden per notice. The notices installed by the seed are SAMPLES written to show the board, filters and badges — replace them with the office’s real announcements.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1050,6 +1328,14 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'people';
+        value: number | Person;
+      } | null)
+    | ({
+        relationTo: 'courses';
+        value: number | Course;
+      } | null)
+    | ({
         relationTo: 'notices';
         value: number | Notice;
       } | null)
@@ -1287,6 +1573,163 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people_select".
+ */
+export interface PeopleSelect<T extends boolean = true> {
+  name?: T;
+  photo?: T;
+  roles?: T;
+  designation?: T;
+  teams?: T;
+  subjects?:
+    | T
+    | {
+        subject?: T;
+        id?: T;
+      };
+  bio?: T;
+  email?: T;
+  phone?: T;
+  social?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  featuredOnHome?: T;
+  order?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  title?: T;
+  shortTitle?: T;
+  arabicTitle?: T;
+  type?: T;
+  listingStatus?: T;
+  order?: T;
+  summary?: T;
+  intro?: T;
+  objectives?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  format?:
+    | T
+    | {
+        durationLabel?: T;
+        residential?: T;
+        gender?: T;
+        bullets?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+      };
+  eligibility?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  specialisations?:
+    | T
+    | {
+        lead?: T;
+        items?:
+          | T
+          | {
+              name?: T;
+              arabicName?: T;
+              id?: T;
+            };
+      };
+  semesters?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        durationLabel?: T;
+        note?: T;
+        sourceTotalCredits?: T;
+        sourceTotalMarks?: T;
+        sourceTotalHours?: T;
+        rows?:
+          | T
+          | {
+              code?: T;
+              title?: T;
+              modules?:
+                | T
+                | {
+                    value?: T;
+                    id?: T;
+                  };
+              credits?: T;
+              hours?: T;
+              marks?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  sdp?:
+    | T
+    | {
+        note?: T;
+        rows?:
+          | T
+          | {
+              title?: T;
+              hours?: T;
+              objective?: T;
+              activities?: T;
+              outcome?: T;
+              id?: T;
+            };
+      };
+  topics?:
+    | T
+    | {
+        label?: T;
+        items?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+      };
+  outcomes?:
+    | T
+    | {
+        intro?: T;
+        items?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              id?: T;
+            };
+      };
+  featured?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
