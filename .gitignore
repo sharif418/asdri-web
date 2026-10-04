@@ -29,3 +29,6 @@ node_modules/
 # Scratch
 *.log
 tsconfig.tsbuildinfo
+
+# Not part of this project (another agent writes it here)
+worklog.md
