@@ -29,6 +29,11 @@ const en: Dictionary = {
       'This part of the institute website will be published soon. Course and contact details are available below.',
     introVideo: 'Introductory video',
     viewNoticeBoard: 'View notice board',
+    marginLabel: 'Admissions',
+    admissionSlipTitle: 'Admission notice',
+    deadline: 'Application deadline',
+    readNotice: 'Read the notice',
+    allAdmissionNotices: 'All admission notices',
   },
   people: {
     leadershipTitle: 'Leadership & Administration',

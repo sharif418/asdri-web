@@ -32,6 +32,11 @@ const bn = {
       'ইনস্টিটিউটের ওয়েবসাইটের এই অংশটি শিগগিরই প্রকাশ হবে। এখন কোর্স ও যোগাযোগের তথ্য নিচে পাওয়া যাবে।',
     introVideo: 'পরিচিতিমূলক ভিডিও',
     viewNoticeBoard: 'নোটিশ বোর্ড দেখুন',
+    marginLabel: 'ভর্তি সংক্রান্ত',
+    admissionSlipTitle: 'ভর্তি বিজ্ঞপ্তি',
+    deadline: 'আবেদনের শেষ তারিখ',
+    readNotice: 'বিজ্ঞপ্তি পড়ুন',
+    allAdmissionNotices: 'সব ভর্তি বিজ্ঞপ্তি',
   },
   people: {
     leadershipTitle: 'নেতৃত্ব ও প্রশাসন',

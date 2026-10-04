@@ -9,10 +9,11 @@ import { ProgrammesSection } from './ProgrammesSection'
 import { SupportSection } from './SupportSection'
 import { VisionSection } from './VisionSection'
 import type { Dictionary } from '@/i18n/getDictionary'
-import type { Course, Home, Person } from '@/payload-types'
+import type { Course, Home, Notice, Person } from '@/payload-types'
 import type { Locale } from '@/i18n/config'
 
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { noticeStatus } from '@/utilities/noticeStatus'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
@@ -35,7 +36,7 @@ export async function HomeSections({
 
   // Shared data for the sections that need it
   const payload = await getPayload({ config: configPromise })
-  const [settings, stats, featuredCourses, featuredPeople] = await Promise.all([
+  const [settings, stats, featuredCourses, featuredPeople, admissionNotices] = await Promise.all([
     getCachedGlobal('site-settings', 1, locale)(),
     getCachedGlobal('impact-stats', 0, locale)(),
     payload.find({
@@ -56,7 +57,20 @@ export async function HomeSections({
       sort: 'order',
       where: { featuredOnHome: { equals: true } },
     }),
+    // The hero's margin: the newest admission notices; the first one not yet closed is shown.
+    payload.find({
+      collection: 'notices',
+      locale,
+      depth: 0,
+      limit: 3,
+      pagination: false,
+      sort: ['-pinned', '-publishedAt'],
+      where: { category: { equals: 'admission' } },
+    }),
   ])
+
+  const admissionNotice =
+    (admissionNotices.docs as Notice[]).find((notice) => noticeStatus(notice) !== 'closed') ?? null
 
   const features = settings.features ?? {}
   const prospectus =
@@ -80,6 +94,8 @@ export async function HomeSections({
                 locale={locale}
                 dict={dict}
                 prospectusUrl={prospectusUrl}
+                admissionNotice={admissionNotice}
+                admissionNote={settings.admissionNote ?? null}
               />
             )
           case 'impactStats':
