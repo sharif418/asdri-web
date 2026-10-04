@@ -7,10 +7,10 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        # Build needs no database and must not bake real secrets into image layers: the public
-        # site renders on request and the admin bundle only needs *a* secret to compile.
-        DATABASE_URL: postgres://build:build@127.0.0.1:1/build
-        PAYLOAD_SECRET: build-only-secret-not-used-at-runtime
+        # Only NEXT_PUBLIC_* is a real build input (inlined into the client bundle). Never add
+        # DATABASE_URL / PAYLOAD_SECRET here, not even as dummies: Coolify merges hard-coded build
+        # args into the runtime env store under the same key and the app starts with the dummy.
+        # The Dockerfile carries its own build-only placeholders.
         NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
     restart: unless-stopped
     environment:
