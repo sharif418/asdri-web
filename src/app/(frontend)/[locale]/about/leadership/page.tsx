@@ -17,14 +17,16 @@ type Props = { params: Promise<{ locale: string }> }
  * In-Charges and the Academic Coordinator, exactly as the client's document lists them. A quiet
  * ruled list; the name links to the person's profile.
  */
-export const revalidate = 600
 
 export default async function LeadershipPage({ params }: Props) {
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
 
-  const [payload, dict] = await Promise.all([getPayload({ config: configPromise }), getDictionary(locale)])
+  const [payload, dict] = await Promise.all([
+    getPayload({ config: configPromise }),
+    getDictionary(locale),
+  ])
 
   const people = await payload.find({
     collection: 'people',

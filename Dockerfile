@@ -30,6 +30,9 @@ RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Bucket bootstrap: idempotent, tolerant of a missing S3 (local-disk fallback), uses the SDK
+# already traced into the standalone bundle by @payloadcms/storage-s3.
+COPY --from=builder --chown=nextjs:nodejs /app/scripts/ensure-bucket.mjs ./scripts/ensure-bucket.mjs
 USER nextjs
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "node scripts/ensure-bucket.mjs || echo 'bucket bootstrap skipped'; exec node server.js"]

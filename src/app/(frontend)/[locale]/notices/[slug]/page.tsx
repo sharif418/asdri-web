@@ -21,22 +21,6 @@ type Props = { params: Promise<{ locale: string; slug: string }> }
  * one-click downloads and the "fill the online form" action for admission and recruitment
  * notices. Works complete with no attachment and no body.
  */
-export const revalidate = 600
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const notices = await payload.find({
-    collection: 'notices',
-    draft: false,
-    limit: 200,
-    pagination: false,
-    select: { slug: true },
-  })
-  return notices.docs
-    .filter((n) => n.slug)
-    .flatMap((n) => locales.map((locale) => ({ locale, slug: n.slug as string })))
-}
-
 export default async function NoticeDetailPage({ params }: Props) {
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) notFound()
@@ -67,13 +51,13 @@ export default async function NoticeDetailPage({ params }: Props) {
               </MarginFact>
               <MarginFact label={dict.notices.statusLabel}>
                 <NoticeStatusBadge
-                    notice={notice}
-                    labels={{
-                      new: dict.notices.statusNew,
-                      active: dict.notices.statusActive,
-                      closed: dict.notices.statusClosed,
-                    }}
-                  />
+                  notice={notice}
+                  labels={{
+                    new: dict.notices.statusNew,
+                    active: dict.notices.statusActive,
+                    closed: dict.notices.statusClosed,
+                  }}
+                />
               </MarginFact>
             </MarginFacts>
 
@@ -102,9 +86,7 @@ export default async function NoticeDetailPage({ params }: Props) {
               <Button asChild className="mt-6 w-full">
                 <a
                   href={applyHref}
-                  {...(applyIsInternal
-                    ? {}
-                    : { target: '_blank', rel: 'noopener noreferrer' })}
+                  {...(applyIsInternal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
                 >
                   {dict.notices.applyOnline}
                 </a>

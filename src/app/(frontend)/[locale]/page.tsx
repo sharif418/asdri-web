@@ -12,7 +12,6 @@ type Props = { params: Promise<{ locale: string }> }
  * featured people, the support band — rendered in the admin's order. Pending-module sections
  * (refutations, media hub, fatwa) render nothing while off.
  */
-export const revalidate = 600
 
 export default async function HomePage({ params }: Props) {
   const { locale: rawLocale } = await params

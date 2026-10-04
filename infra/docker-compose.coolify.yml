@@ -7,8 +7,10 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-        PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+        # Build needs no database and must not bake real secrets into image layers: the public
+        # site renders on request and the admin bundle only needs *a* secret to compile.
+        DATABASE_URL: postgres://build:build@127.0.0.1:1/build
+        PAYLOAD_SECRET: build-only-secret-not-used-at-runtime
         NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
     restart: unless-stopped
     environment:

@@ -19,7 +19,6 @@ type Props = { params: Promise<{ locale: string }> }
  * Teachers Training 1). Per-programme totals are computed from the rows; the overall figure
  * stays on the home page until the office confirms it (GAP-C1).
  */
-export const revalidate = 600
 
 export default async function AlumniPage({ params }: Props) {
   const { locale: rawLocale } = await params

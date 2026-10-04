@@ -6,7 +6,7 @@ import React, { cache } from 'react'
 
 import { CourseDetail } from '@/components/courses/CourseDetail'
 import type { Locale } from '@/i18n/config'
-import { isLocale, locales } from '@/i18n/config'
+import { isLocale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/getDictionary'
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
@@ -15,31 +15,12 @@ type Props = { params: Promise<{ locale: string; slug: string }> }
  * A programme's page (REQ-ACA-02..09). The route fetches the published course for the locale and
  * hands it to the matn/hashiya detail component.
  */
-export const revalidate = 600
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const courses = await payload.find({
-    collection: 'courses',
-    draft: false,
-    limit: 100,
-    pagination: false,
-    select: { slug: true },
-  })
-  return courses.docs
-    .filter((c) => c.slug)
-    .flatMap((c) => locales.map((locale) => ({ locale, slug: c.slug as string })))
-}
-
 export default async function CoursePage({ params }: Props) {
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
 
-  const [course, dict] = await Promise.all([
-    queryCourseBySlug(slug, locale),
-    getDictionary(locale),
-  ])
+  const [course, dict] = await Promise.all([queryCourseBySlug(slug, locale), getDictionary(locale)])
   if (!course) notFound()
 
   return (

@@ -25,7 +25,6 @@ type Category = (typeof CATEGORIES)[number]
  * Facebook — as ruled rows with date, serif title, category and computed status badges. Plain
  * filter links, a keyword search and a quiet month archive; everything travels in the URL.
  */
-export const revalidate = 600
 
 export default async function NoticeBoardPage({ params, searchParams }: Props) {
   const { locale: rawLocale } = await params
@@ -33,10 +32,15 @@ export default async function NoticeBoardPage({ params, searchParams }: Props) {
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
 
-  const [payload, dict] = await Promise.all([getPayload({ config: configPromise }), getDictionary(locale)])
+  const [payload, dict] = await Promise.all([
+    getPayload({ config: configPromise }),
+    getDictionary(locale),
+  ])
   const basePath = localizedHref(locale, '/notices')
 
-  const activeCategory = CATEGORIES.includes(category as Category) ? (category as Category) : undefined
+  const activeCategory = CATEGORIES.includes(category as Category)
+    ? (category as Category)
+    : undefined
   const search = q?.trim() || undefined
 
   const where: Where = {}
@@ -75,7 +79,11 @@ export default async function NoticeBoardPage({ params, searchParams }: Props) {
     if (!notice.publishedAt) continue
     const date = new Date(notice.publishedAt)
     const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`
-    const entry = monthCounts.get(key) ?? { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, count: 0 }
+    const entry = monthCounts.get(key) ?? {
+      year: date.getUTCFullYear(),
+      month: date.getUTCMonth() + 1,
+      count: 0,
+    }
     entry.count += 1
     monthCounts.set(key, entry)
   }
@@ -133,19 +141,19 @@ export default async function NoticeBoardPage({ params, searchParams }: Props) {
           <ul className="divide-y divide-border border-y border-border">
             {notices.docs.map((notice) => (
               <NoticeRow
-                  key={notice.id}
-                  notice={notice}
-                  locale={locale}
-                  dict={{
-                    pinnedLabel: dict.notices.pinnedLabel,
-                    categoryLabels: dict.notices.categoryLabels,
-                  }}
-                  labels={{
-                    new: dict.notices.statusNew,
-                    active: dict.notices.statusActive,
-                    closed: dict.notices.statusClosed,
-                  }}
-                />
+                key={notice.id}
+                notice={notice}
+                locale={locale}
+                dict={{
+                  pinnedLabel: dict.notices.pinnedLabel,
+                  categoryLabels: dict.notices.categoryLabels,
+                }}
+                labels={{
+                  new: dict.notices.statusNew,
+                  active: dict.notices.statusActive,
+                  closed: dict.notices.statusClosed,
+                }}
+              />
             ))}
           </ul>
         )}

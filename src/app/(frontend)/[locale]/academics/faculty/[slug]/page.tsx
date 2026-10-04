@@ -8,7 +8,7 @@ import { MarginFact, MarginFacts, MatnHashiya } from '@/components/layout/MatnHa
 import { PersonMonogram } from '@/components/people/PersonMonogram'
 import type { Locale } from '@/i18n/config'
 import type { Person } from '@/payload-types'
-import { isLocale, locales } from '@/i18n/config'
+import { isLocale } from '@/i18n/config'
 import { getDictionary } from '@/i18n/getDictionary'
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
@@ -20,22 +20,6 @@ type Props = { params: Promise<{ locale: string; slug: string }> }
  * complete when the biography is empty (GAP-C5: no bios yet) — name, designation and subjects
  * stand on their own.
  */
-export const revalidate = 600
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const people = await payload.find({
-    collection: 'people',
-    draft: false,
-    limit: 500,
-    pagination: false,
-    select: { slug: true },
-  })
-  return people.docs
-    .filter((p) => p.slug)
-    .flatMap((p) => locales.map((locale) => ({ locale, slug: p.slug as string })))
-}
-
 export default async function PersonProfilePage({ params }: Props) {
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) notFound()

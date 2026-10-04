@@ -7,6 +7,7 @@ import * as migration_20261003_165551_notices_collection from './20261003_165551
 import * as migration_20261003_173258_home_global from './20261003_173258_home_global';
 import * as migration_20261003_184057_faqs_downloads_alumni_globals from './20261003_184057_faqs_downloads_alumni_globals';
 import * as migration_20261003_184124_categories_localised_title from './20261003_184124_categories_localised_title';
+import * as migration_20261004_062500_restore_media_objectkey from './20261004_062500_restore_media_objectkey';
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20261003_184124_categories_localised_title.up,
     down: migration_20261003_184124_categories_localised_title.down,
     name: '20261003_184124_categories_localised_title',
+  },
+  {
+    up: migration_20261004_062500_restore_media_objectkey.up,
+    down: migration_20261004_062500_restore_media_objectkey.down,
+    name: '20261004_062500_restore_media_objectkey',
   },
 ];
