@@ -27,6 +27,8 @@ const en: Dictionary = {
     comingSoon: 'This page is being prepared',
     comingSoonBody:
       'This part of the institute website will be published soon. Course and contact details are available below.',
+    introVideo: 'Introductory video',
+    viewNoticeBoard: 'View notice board',
   },
   people: {
     leadershipTitle: 'Leadership & Administration',

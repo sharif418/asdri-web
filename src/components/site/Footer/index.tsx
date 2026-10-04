@@ -44,10 +44,14 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
       : null
   const logo = settings.logo && typeof settings.logo === 'object' ? (settings.logo as Media) : null
   const year = formatNumber(new Date().getFullYear(), locale, { useGrouping: false })
-  const columns = (nav.footerColumns ?? []).map((col) => ({
-    label: col.label,
-    links: (col.links ?? []).filter((l) => enabled(l.feature)),
-  }))
+  // A column whose every link is hidden by its module flag disappears rather than rendering
+  // its heading above nothing (review item 4, same rule as the header's parent items).
+  const columns = (nav.footerColumns ?? [])
+    .map((col) => ({
+      label: col.label,
+      links: (col.links ?? []).filter((l) => enabled(l.feature)),
+    }))
+    .filter((col) => col.links.length > 0)
 
   return (
     <footer className="mt-auto bg-primary-deep text-primary-foreground">

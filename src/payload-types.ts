@@ -119,11 +119,13 @@ export interface Config {
     'site-settings': SiteSetting;
     navigation: Navigation;
     'impact-stats': ImpactStat;
+    home: Home;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     'impact-stats': ImpactStatsSelect<false> | ImpactStatsSelect<true>;
+    home: HomeSelect<false> | HomeSelect<true>;
   };
   locale: 'bn' | 'en';
   widgets: {
@@ -2537,6 +2539,184 @@ export interface ImpactStat {
   createdAt?: string | null;
 }
 /**
+ * The home page, section by section. Drag the rows to reorder the page; untick a section to hide it. Which programmes and people appear is chosen on the course / person themselves.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home".
+ */
+export interface Home {
+  id: number;
+  /**
+   * One block per section, in display order.
+   */
+  sections?:
+    | (
+        | {
+            enabled?: boolean | null;
+            /**
+             * The large serif headline. Only the hero headline may be centred; nothing else competes with it.
+             */
+            heading: string;
+            /**
+             * One-line statement of purpose beneath the headline (reading text).
+             */
+            tagline?: string | null;
+            /**
+             * Optional intro video (YouTube URL). Shown as a poster that plays on click (GAP-C6).
+             */
+            videoUrl?: string | null;
+            /**
+             * Poster frame for the video. While there is no video, the hero stays typographic.
+             */
+            posterImage?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Section heading. The figures come from Site ▸ Impact stats.
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'impactStats';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * e.g. মূল লক্ষ্য (bn) / Vision (en)
+             */
+            heading: string;
+            /**
+             * The vision statement, verbatim from the client document.
+             */
+            statement: string;
+            /**
+             * Three pillars under the statement. English is the client’s own; the Bangla drafts are translated from it for the office to confirm or replace.
+             */
+            pillars?:
+              | {
+                  title: string;
+                  body: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'vision';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * The six featured programmes (cards) — the one place cards belong. Which courses appear is set per course (featured flag).
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'programmes';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Intellectual refutations highlight. Renders nothing until the clarifications module exists (REQ-HOME-05).
+             */
+            heading: string;
+            /**
+             * Draft copy for when the module is ready.
+             */
+            description?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'refutations';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Latest notices with plain category tabs.
+             */
+            heading: string;
+            /**
+             * How many notices per tab.
+             */
+            limit?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'notices';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Campus life as a ruled two-column list.
+             */
+            heading: string;
+            /**
+             * The document marks photo slots; upload them per item when photos arrive (GAP-C6).
+             */
+            items?:
+              | {
+                  title: string;
+                  body: string;
+                  image?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'campusLife';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Latest articles, videos, gallery. Renders nothing until the media modules exist (REQ-HOME-08).
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaHub';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Featured leadership and faculty. Which people appear is set per person (featured on home flag).
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'people';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * A single calm band leading to the donation page.
+             */
+            heading: string;
+            /**
+             * One or two lines of context (the Zakat Fund scholarship line works well).
+             */
+            body?: string | null;
+            ctaLabel?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'support';
+          }
+        | {
+            enabled?: boolean | null;
+            /**
+             * Quick ask box and fatwa bank entry. Renders nothing until the fatwa module exists (REQ-HOME-11).
+             */
+            heading: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'fatwa';
+          }
+      )[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
@@ -2696,6 +2876,130 @@ export interface ImpactStatsSelect<T extends boolean = true> {
         value?: T;
         suffix?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  sections?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              tagline?: T;
+              videoUrl?: T;
+              posterImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        impactStats?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        vision?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              statement?: T;
+              pillars?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        programmes?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        refutations?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              description?: T;
+              id?: T;
+              blockName?: T;
+            };
+        notices?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
+        campusLife?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        mediaHub?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        people?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        support?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              body?: T;
+              ctaLabel?: T;
+              id?: T;
+              blockName?: T;
+            };
+        fatwa?:
+          | T
+          | {
+              enabled?: T;
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

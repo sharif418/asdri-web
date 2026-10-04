@@ -132,7 +132,20 @@ export default async function NoticeBoardPage({ params, searchParams }: Props) {
         ) : (
           <ul className="divide-y divide-border border-y border-border">
             {notices.docs.map((notice) => (
-              <NoticeRow key={notice.id} notice={notice} locale={locale} dict={dict.notices} />
+              <NoticeRow
+                  key={notice.id}
+                  notice={notice}
+                  locale={locale}
+                  dict={{
+                    pinnedLabel: dict.notices.pinnedLabel,
+                    categoryLabels: dict.notices.categoryLabels,
+                  }}
+                  labels={{
+                    new: dict.notices.statusNew,
+                    active: dict.notices.statusActive,
+                    closed: dict.notices.statusClosed,
+                  }}
+                />
             ))}
           </ul>
         )}

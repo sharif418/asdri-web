@@ -3,7 +3,6 @@ import Link from 'next/link'
 import React from 'react'
 
 import type { Locale } from '@/i18n/config'
-import type { Dictionary } from '@/i18n/getDictionary'
 import type { Notice } from '@/payload-types'
 
 import { NoticeStatusBadge } from './NoticeStatusBadge'
@@ -19,10 +18,12 @@ export function NoticeRow({
   notice,
   locale,
   dict,
+  labels,
 }: {
   notice: Notice
   locale: Locale
-  dict: Dictionary['notices']
+  dict: { pinnedLabel: string; categoryLabels: Record<string, string> }
+  labels: { new: string; active: string; closed: string }
 }) {
   const hasAttachment = (notice.attachments ?? []).length > 0
 
@@ -55,8 +56,8 @@ export function NoticeRow({
         )}
       </div>
       <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-        <Badge variant="primary">{dict.categoryLabels[notice.category]}</Badge>
-        <NoticeStatusBadge notice={notice} dict={dict} />
+        <Badge variant="primary">{dict.categoryLabels[notice.category] ?? notice.category}</Badge>
+        <NoticeStatusBadge notice={notice} labels={labels} />
       </div>
     </li>
   )

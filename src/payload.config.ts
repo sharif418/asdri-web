@@ -12,6 +12,7 @@ import { Pages } from './collections/Pages'
 import { People } from './collections/People'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+import { Home } from './globals/Home'
 import { ImpactStats } from './globals/ImpactStats'
 import { Navigation } from './globals/Navigation'
 import { SiteSettings } from './globals/SiteSettings'
@@ -86,7 +87,7 @@ export default buildConfig({
   },
   collections: [Pages, Posts, People, Courses, Notices, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [SiteSettings, Navigation, ImpactStats],
+  globals: [SiteSettings, Navigation, ImpactStats, Home],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
