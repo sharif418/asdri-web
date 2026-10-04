@@ -18,14 +18,16 @@ type Props = { params: Promise<{ locale: string }> }
  * and short trainings — not cards. Draft-status programmes stay listed with the marked
  * placeholder (GAP-C4).
  */
-export const revalidate = 600
 
 export default async function CoursesIndexPage({ params }: Props) {
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
 
-  const [payload, dict] = await Promise.all([getPayload({ config: configPromise }), getDictionary(locale)])
+  const [payload, dict] = await Promise.all([
+    getPayload({ config: configPromise }),
+    getDictionary(locale),
+  ])
 
   const courses = await payload.find({
     collection: 'courses',
@@ -67,10 +69,7 @@ export default async function CoursesIndexPage({ params }: Props) {
             (group) =>
               group.list.length > 0 && (
                 <section key={group.heading} aria-labelledby={group.heading.replace(/\s+/g, '-')}>
-                  <h2
-                    id={group.heading.replace(/\s+/g, '-')}
-                    className="text-h3"
-                  >
+                  <h2 id={group.heading.replace(/\s+/g, '-')} className="text-h3">
                     {group.heading}
                   </h2>
                   <ul className="mt-4 divide-y divide-border border-y border-border">

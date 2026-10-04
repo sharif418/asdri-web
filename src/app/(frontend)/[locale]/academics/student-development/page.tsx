@@ -21,14 +21,16 @@ const SDP_COURSE_SLUG = 'preparatory-year-for-specialization'
  * reading, community service — reusing the same ruled table the course page shows. The note
  * explains the programmes are compulsory but carry no credits; totals are computed, never typed.
  */
-export const revalidate = 600
 
 export default async function StudentDevelopmentPage({ params }: Props) {
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
 
-  const [payload, dict] = await Promise.all([getPayload({ config: configPromise }), getDictionary(locale)])
+  const [payload, dict] = await Promise.all([
+    getPayload({ config: configPromise }),
+    getDictionary(locale),
+  ])
 
   const course = await payload.find({
     collection: 'courses',

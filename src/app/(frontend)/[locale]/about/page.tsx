@@ -16,7 +16,6 @@ type Props = { params: Promise<{ locale: string }> }
  * from the client's document. The objectives are a list, not a sequence, so they render as an
  * unnumbered ruled list in the reading measure — a column of a kitab page, not a card stack.
  */
-export const revalidate = 600
 
 export default async function AboutPage({ params }: Props) {
   const { locale: rawLocale } = await params

@@ -20,6 +20,14 @@ import './globals.css'
 
 type Props = { children: React.ReactNode; params: Promise<{ locale: string }> }
 
+/**
+ * The public site renders on request. Every page reads Payload (globals, courses, notices…),
+ * and the production image is built in a container that has no database, so build-time
+ * prerendering is off; content edited in the admin is live on the next request. Per-route
+ * caching (ISR) can be reintroduced later for high-traffic pages with a reachable build DB.
+ */
+export const dynamic = 'force-dynamic'
+
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }

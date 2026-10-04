@@ -24,7 +24,6 @@ const hostOf = (url: string): string => {
  * a quiet ruled list of external links. GAP-B4 keeps the list to what the office confirms; the
  * seed starts it with the Foundation's own site.
  */
-export const revalidate = 600
 
 export default async function OtherWebsitesPage({ params }: Props) {
   const { locale: rawLocale } = await params

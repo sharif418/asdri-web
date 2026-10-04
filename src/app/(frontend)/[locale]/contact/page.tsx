@@ -19,7 +19,6 @@ type Props = { params: Promise<{ locale: string }> }
  * column carries where it is and how admission news is announced. No contact form in this
  * batch (forms arrive with admissions); the page is complete without one.
  */
-export const revalidate = 600
 
 export default async function ContactPage({ params }: Props) {
   const { locale: rawLocale } = await params

@@ -16,7 +16,6 @@ type Props = { params: Promise<{ locale: string }> }
  * from the Foundation's Zakat Fund, the eligibility proof, the allowances — as quiet reading
  * paragraphs. No invented highlights; the paragraph carries its own weight.
  */
-export const revalidate = 600
 
 export default async function ScholarshipsPage({ params }: Props) {
   const { locale: rawLocale } = await params

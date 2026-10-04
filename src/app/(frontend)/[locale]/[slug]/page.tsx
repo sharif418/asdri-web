@@ -10,26 +10,9 @@ import React, { cache } from 'react'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { type Locale, isLocale, locales, localizedHref } from '@/i18n/config'
+import { type Locale, isLocale, localizedHref } from '@/i18n/config'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
-
-/** Editor-built pages (Payload "pages" collection), per locale. Home has its own route. */
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: { slug: true },
-  })
-
-  return pages.docs
-    .filter((doc) => doc.slug && doc.slug !== 'home')
-    .flatMap(({ slug }) => locales.map((locale) => ({ locale, slug: slug as string })))
-}
 
 type Args = { params: Promise<{ locale: string; slug?: string }> }
 

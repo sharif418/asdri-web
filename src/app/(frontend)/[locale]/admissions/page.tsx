@@ -18,7 +18,6 @@ type Props = { params: Promise<{ locale: string }> }
  * numerals because they are a sequence. Hidden entirely while the admissions module is off
  * (REQ-GEN-06).
  */
-export const revalidate = 600
 
 export default async function AdmissionProcessPage({ params }: Props) {
   const { locale: rawLocale } = await params

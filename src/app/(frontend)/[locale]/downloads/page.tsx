@@ -26,7 +26,6 @@ type Category = (typeof CATEGORIES)[number]
  * forms, and the dawah materials the menu points at (?category=dawah-material). Ruled rows,
  * plain category filters and a keyword search, all URL-driven like the notice board.
  */
-export const revalidate = 600
 
 export default async function DownloadsPage({ params, searchParams }: Props) {
   const { locale: rawLocale } = await params
@@ -41,7 +40,9 @@ export default async function DownloadsPage({ params, searchParams }: Props) {
   ])
   if (!isFeatureEnabled(settings, 'downloads')) notFound()
 
-  const activeCategory = CATEGORIES.includes(category as Category) ? (category as Category) : undefined
+  const activeCategory = CATEGORIES.includes(category as Category)
+    ? (category as Category)
+    : undefined
   const search = q?.trim() || undefined
 
   const where: Where = {}

@@ -2,7 +2,8 @@
 // Creates the media bucket (if missing) and sets a public-read policy for GET objects.
 // Works against any S3-compatible server (RustFS, Garage, MinIO, R2, AWS) using the env vars
 // from .env.example. Run: `bun run s3:init`.
-import 'dotenv/config'
+// dotenv is a dev convenience; in the production image the env comes from the orchestrator.
+await import('dotenv/config').catch(() => {})
 import {
   CreateBucketCommand,
   HeadBucketCommand,

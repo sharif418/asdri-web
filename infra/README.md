@@ -53,10 +53,29 @@ hand-edit snapshots; never reference the baseline from `index.ts`.
 
 One more generator quirk: run `migrate:create` **with the S3 variables set** (or empty), matching
 how the committed migration history was generated — otherwise the generated diff drops
-`media._objectkey` from the chain.
+`media._objectkey` from the chain. This happened once (`20261003_153157_people_collection`);
+`20261004_062500_restore_media_objectkey` repairs it idempotently, so fresh databases are fine.
 
 
 ## Coolify (staging / production)
+
+### Staging in five steps (asdri.ailearnersbd.com)
+
+1. DNS: `A asdri → <VPS IP>` (done 2026-10-04 at Namecheap). Coolify issues the certificate.
+2. Coolify → Project → **New resource → Docker Compose** → source: the public GitHub repo
+   `sharif418/asdri-web`, branch `main`, compose file `infra/docker-compose.coolify.yml`.
+3. Environment variables: copy `infra/staging.env.example`, fill the secrets
+   (`openssl rand -hex 32`), set `NEXT_PUBLIC_SERVER_URL=https://asdri.ailearnersbd.com`,
+   leave `S3_PUBLIC_URL` empty (files are served through the app).
+4. Domain: on the `app` service set `https://asdri.ailearnersbd.com` → port 3000. Deploy.
+   The build needs no database (the public site renders on request); the container runs
+   pending migrations on start (`prodMigrations`) and creates the media bucket.
+5. First run: open `/admin`, create the first admin user, then press **Load starter content**
+   on the dashboard. It seeds both locales and purges the caches. Health: `/api/health`.
+
+Redeploys happen on every push to `main` if the resource's auto-deploy is on; otherwise press
+Deploy. Database and bucket live in named volumes and survive redeploys.
+
 
 `docker-compose.coolify.yml` is a Docker Compose resource for Coolify:
 

@@ -22,14 +22,16 @@ type Props = { params: Promise<{ locale: string }> }
  * one quiet line; the catch-all group (অন্যান্য) is a safety net for team-less teachers and
  * never renders when empty (review item 8).
  */
-export const revalidate = 600
 
 export default async function FacultyDirectoryPage({ params }: Props) {
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
 
-  const [payload, dict] = await Promise.all([getPayload({ config: configPromise }), getDictionary(locale)])
+  const [payload, dict] = await Promise.all([
+    getPayload({ config: configPromise }),
+    getDictionary(locale),
+  ])
 
   const people = await payload.find({
     collection: 'people',

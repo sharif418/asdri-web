@@ -27,7 +27,6 @@ type Props = {
  * accordions. Everything travels in the URL, so the page works like the notice board: a server
  * page, no client state. Rows carry their category label while every category is shown.
  */
-export const revalidate = 600
 
 export default async function FaqPage({ params, searchParams }: Props) {
   const { locale: rawLocale } = await params

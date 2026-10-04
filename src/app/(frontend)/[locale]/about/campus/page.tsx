@@ -17,7 +17,6 @@ type Props = { params: Promise<{ locale: string }> }
  * Campus life), two pages. Works complete when a facility body is short or the campus life
  * section is switched off.
  */
-export const revalidate = 600
 
 export default async function CampusPage({ params }: Props) {
   const { locale: rawLocale } = await params
@@ -32,7 +31,8 @@ export default async function CampusPage({ params }: Props) {
 
   const facilities = (about.facilities ?? []).filter((f) => f.title || f.body)
   const campusBlock = (home.sections ?? []).find(
-    (section): section is CampusSectionBlock => section.blockType === 'campusLife' && section.enabled !== false,
+    (section): section is CampusSectionBlock =>
+      section.blockType === 'campusLife' && section.enabled !== false,
   )
 
   return (
@@ -62,7 +62,10 @@ export default async function CampusPage({ params }: Props) {
               title={dict.about.facilitiesEmptyTitle}
               description={dict.about.facilitiesEmptyBody}
               action={
-                <StaffAddAction href="/admin/globals/about-content" label={dict.about.campusTitle} />
+                <StaffAddAction
+                  href="/admin/globals/about-content"
+                  label={dict.about.campusTitle}
+                />
               }
             />
           </div>

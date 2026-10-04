@@ -1,0 +1,20 @@
+# Keep the build context small: the image needs sources, lockfile and public/ only.
+node_modules
+.next
+.git
+.github
+.vscode
+.claude
+docs
+infra
+scripts/review-shots.ts
+tests
+test-results
+playwright-report
+*.log
+.env
+.env.*
+!.env.example
+tsconfig.tsbuildinfo
+README.md
+AGENTS.md
