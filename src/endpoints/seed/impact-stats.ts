@@ -7,7 +7,7 @@ export const impactStatsSeed = {
       { label: 'মোট শিক্ষার্থী', value: 420, suffix: '+' },
       { label: 'আলেম শিক্ষার্থী', value: 128, suffix: '+' },
       { label: 'জেনারেল শিক্ষার্থী', value: 102, suffix: '+' },
-      { label: 'স্বল্পমেয়াদী কোর্সে', value: 190, suffix: '+' },
+      { label: 'স্বল্পমেয়াদী কোর্সের শিক্ষার্থী', value: 190, suffix: '+' },
       { label: 'বর্তমানে অধ্যয়নরত', value: 127, suffix: '' },
       { label: 'সফলভাবে উত্তীর্ণ (অ্যালামনাই)', value: 293, suffix: '' },
     ],
