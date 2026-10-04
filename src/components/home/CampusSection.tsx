@@ -4,6 +4,7 @@ import React from 'react'
 import type { Home, Media } from '@/payload-types'
 
 import { getMediaUrl } from '@/utilities/getMediaUrl'
+import { cn } from '@/utilities/ui'
 
 type CampusBlock = Extract<
   NonNullable<Home['sections']>[number],
@@ -28,10 +29,16 @@ export function CampusSection({ block }: { block: CampusBlock }) {
           {items.map((item, i) => {
             const image =
               item.image && typeof item.image === 'object' ? (item.image as Media) : null
+            // The two-column template (image | text) is reserved only when an image actually
+            // exists; without one the item is a single full-width column (review item 1).
+            const hasImage = Boolean(image?.url)
             return (
               <li
                 key={item.id ?? i}
-                className="grid gap-4 border-t border-border py-8 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-x-8"
+                className={cn(
+                  'grid gap-4 border-t border-border py-8 sm:gap-x-8',
+                  hasImage && 'sm:grid-cols-[8rem_minmax(0,1fr)]',
+                )}
               >
                 {image?.url && (
                   <span className="relative block aspect-[4/3] overflow-hidden rounded-sm border border-border">

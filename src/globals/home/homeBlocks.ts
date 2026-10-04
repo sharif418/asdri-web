@@ -66,7 +66,7 @@ export const VisionBlock: Block = {
   labels: { singular: 'Vision & pillars', plural: 'Vision & pillars' },
   fields: [
     enabledField(true),
-    headingField('e.g. মূল লক্ষ্য (Vision)'),
+    headingField('e.g. মূল লক্ষ্য (bn) / Vision (en)'),
     {
       name: 'statement',
       type: 'textarea',
@@ -81,7 +81,7 @@ export const VisionBlock: Block = {
       admin: {
         components: { RowLabel: '@/components/admin/RowLabel#RowLabel' },
         description:
-          'Three pillars under the statement. Empty in Bangla until the office provides translations.',
+          'Three pillars under the statement. English is the client’s own; the Bangla drafts are translated from it for the office to confirm or replace.',
       },
       fields: [
         { name: 'title', type: 'text', localized: true, required: true },

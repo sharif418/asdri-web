@@ -27,19 +27,27 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
 
   const items: NavItem[] = (nav.primary ?? [])
     .filter((item) => enabled(item.feature))
-    .map((item) => ({
-      label: item.label,
-      href: href(item.href),
-      newTab: Boolean(item.newTab),
-      children: (item.children ?? [])
+    .flatMap((item) => {
+      const children = (item.children ?? [])
         .filter((child) => enabled(child.feature))
         .map((child) => ({
           label: child.label,
           href: href(child.href),
           newTab: Boolean(child.newTab),
           description: child.description ?? undefined,
-        })),
-    }))
+        }))
+      // A parent that exists only to group children disappears when every child is hidden
+      // by its module flag — its own href leads to a page that does not exist (review item 4).
+      if ((item.children?.length ?? 0) > 0 && children.length === 0) return []
+      return [
+        {
+          label: item.label,
+          href: href(item.href),
+          newTab: Boolean(item.newTab),
+          children,
+        },
+      ]
+    })
 
   const utility: NavItem[] = (nav.utility ?? [])
     .filter((item) => enabled(item.feature))

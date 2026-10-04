@@ -24,8 +24,37 @@ Then `bun run dev` from the repo root. RustFS console at http://localhost:9001, 
 - `migrate:create` prompts (interactively) when one run both drops and creates tables or enums
   of the same kind ("created or renamed?"). Avoid the prompt by splitting such a change into two
   migrations: first remove, then add (see the two `site_shell` migrations for an example).
-- Starter content: `bun run seed` writes site settings, navigation and impact stats in bn + en.
-  It is idempotent and never touches collections.
+- Starter content: `bun run seed` writes the site globals (settings, navigation, impact stats,
+  home), and upserts the starter collections (people, courses, sample notices) by slug in bn + en.
+  It is idempotent: re-running overwrites the seeded starter content with the same values and
+  leaves anything the office has added untouched (items are matched by slug).
+
+### The snapshot baseline (`20261003_173205_schema_baseline.json`)
+
+`migrate:create` does not diff against the database or the last applied migration: it diffs the
+current schema against the **lexicographically latest `*.json` snapshot** in `src/migrations/`.
+When several feature branches each carry their own migration, their snapshots each describe a
+different partial schema, so after merging such branches a naive `migrate:create` would try to
+re-create tables that already exist (dropped on another branch, missing on this one).
+
+The baseline file exists to close that gap: it is a **snapshot-only** migration — a full picture
+of the merged schema (people + courses + notices, everything before the home global) that is
+**deliberately not imported by `src/migrations/index.ts`** and never runs. Its only job is to be
+the lexicographically latest snapshot at the time it was cut, so the generator diffs from a
+complete picture instead of a partial one. (`20261003_173258_home_global.json` and everything
+generated after it now serve the same role as they are later in sort order.)
+
+**Rule for parallel branches:** after merging a branch that added a migration, regenerate the
+baseline on the merged branch *before* creating the next migration — point the generator at a
+complete schema by keeping the latest snapshot accurate. In practice: merge, then
+`bun run payload migrate:create baseline_refresh` (or cut a new snapshot-only baseline) whenever
+the newest `.json` in the folder predates tables that already exist on your branch. Never
+hand-edit snapshots; never reference the baseline from `index.ts`.
+
+One more generator quirk: run `migrate:create` **with the S3 variables set** (or empty), matching
+how the committed migration history was generated — otherwise the generated diff drops
+`media._objectkey` from the chain.
+
 
 ## Coolify (staging / production)
 

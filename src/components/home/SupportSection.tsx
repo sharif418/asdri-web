@@ -12,9 +12,12 @@ type SupportBlock = Extract<NonNullable<Home['sections']>[number], { blockType: 
 
 /**
  * The single calm support band (REQ-HOME-10, phase 1 scope): the dark-green band shared with
- * the Foundation's site, one line about where the money goes, and the one illuminated button
- * leading to the donation page. No fund grid, no calculator here yet — those belong to the
- * donation module with its own screens.
+ * the Foundation's site, one line about where the money goes, and the button leading to the
+ * donation page. No fund grid, no calculator here yet — those belong to the donation module
+ * with its own screens. The hero hairline is the home page's single gold (docs/05 §3b); the
+ * button here is an outline-on-dark treatment — measured 17.6:1 text and border against the
+ * band in rest and hover (review items 2–3; `secondary`'s dark text fails on its hover state
+ * over the band, and the green `default` shape blends into the band at 1.15:1).
  */
 export function SupportSection({
   block,
@@ -36,7 +39,9 @@ export function SupportSection({
       <div className="container">
         <div className="grid items-center gap-8 md:grid-cols-12">
           <div className="md:col-span-8">
-            <h2 className="font-serif text-h3 font-semibold">{block.heading}</h2>
+            <h2 className="font-serif text-h3 font-semibold text-primary-foreground">
+              {block.heading}
+            </h2>
             {block.body && (
               <p className="mt-3 max-w-[68ch] text-small leading-relaxed text-primary-foreground/85">
                 {block.body}
@@ -44,7 +49,12 @@ export function SupportSection({
             )}
           </div>
           <div className="md:col-span-4 md:justify-self-end">
-            <Button asChild variant="illuminated" size="lg">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-primary-foreground/50 text-primary-foreground hover:border-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            >
               <Link href={localizedHref(locale, '/donate')}>{block.ctaLabel || dict.header.donate}</Link>
             </Button>
           </div>

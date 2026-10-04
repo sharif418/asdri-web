@@ -9,8 +9,9 @@ type VisionBlock = Extract<
 
 /**
  * The vision statement and its three pillars (REQ-HOME-03). The statement is the client's own
- * text in the reading column; the pillars — which the client's document gives in English only —
- * render as a ruled list when present. Not numbered: the pillars are not a sequence.
+ * text in the reading column; the pillars render as a ruled list when present (the client's
+ * document gives them in English; the Bangla ones are seeded drafts for the office to confirm
+ * — review item 10). Not numbered: the pillars are not a sequence.
  */
 export function VisionSection({ block }: { block: VisionBlock }) {
   const pillars = block.pillars ?? []
