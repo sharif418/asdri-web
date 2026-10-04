@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import React from 'react'
 
 import { MarginFact, MarginFacts, MatnHashiya } from '@/components/layout/MatnHashiya'
+import { CurriculumTable } from '@/components/courses/CurriculumTable'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
@@ -29,21 +30,21 @@ const PYS_SEM1 = [
     code: 'PYS 1101',
     title: 'Islam and Da‘wah',
     modules: ['Introduction to Islam', 'Introduction to Da‘wah'],
-    credit: 3,
+    credits: 3,
     marks: 100,
   },
   {
     code: 'PYS 1102',
     title: 'Introduction to Islamic Sciences',
     modules: ['Ulumul Quran', 'Ulumul Hadith', 'Usulul Fiqh'],
-    credit: 3,
+    credits: 3,
     marks: 100,
   },
   {
     code: 'PYS 1103',
     title: 'Islamic History and Civilization',
     modules: ['Islam in South Asia', 'Intellectual History of Islamic Civilization'],
-    credit: 3,
+    credits: 3,
     marks: 100,
   },
   {
@@ -55,14 +56,14 @@ const PYS_SEM1 = [
       'Foundation of Politics & International Relations',
       'Legal Systems & General Jurisprudence',
     ],
-    credit: 4,
+    credits: 4,
     marks: 100,
   },
   {
     code: 'PYS 1105',
     title: 'Critical Reading',
     modules: ['Critical Reading'],
-    credit: 4,
+    credits: 4,
     marks: 100,
   },
 ]
@@ -283,64 +284,20 @@ export default function DesignSpecimenPage() {
       </Spec>
 
       <Spec id="table" title="কারিকুলাম টেবিল">
-        {/* Desktop: a ruled kitab table. Mobile: each row becomes a stacked block with the code in the margin position. */}
-        <div className="hidden md:block">
-          <table className="w-full border-collapse text-small">
-            <thead>
-              <tr className="rule-ink border-b text-left text-caption text-ink-muted">
-                <th scope="col" className="py-2 pr-4 font-medium">
-                  কোড
-                </th>
-                <th scope="col" className="py-2 pr-4 font-medium">
-                  কোর্স
-                </th>
-                <th scope="col" className="py-2 pr-4 font-medium">
-                  মডিউল
-                </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium">
-                  ক্রেডিট
-                </th>
-                <th scope="col" className="py-2 text-right font-medium">
-                  নম্বর
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {PYS_SEM1.map((r) => (
-                <tr key={r.code} className="align-top">
-                  <td className="py-3 pr-4 whitespace-nowrap text-ink-muted">{r.code}</td>
-                  <td className="py-3 pr-4 font-serif text-body">{r.title}</td>
-                  <td className="py-3 pr-4 text-ink-muted">{r.modules.join(', ')}</td>
-                  <td className="py-3 pr-4 text-right">{formatNumber(r.credit)}</td>
-                  <td className="py-3 text-right">{formatNumber(r.marks)}</td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="rule-ink border-t font-medium">
-                <td className="py-3 pr-4" colSpan={3}>
-                  মোট
-                </td>
-                <td className="py-3 pr-4 text-right">{formatNumber(17)}</td>
-                <td className="py-3 text-right">{formatNumber(600)}</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-        <ul className="divide-y divide-border rule-ink border-t md:hidden">
-          {PYS_SEM1.map((r) => (
-            <li key={r.code} className="grid grid-cols-[5.5rem_1fr] gap-x-3 py-4">
-              <span className="text-caption text-ink-muted">{r.code}</span>
-              <div>
-                <p className="font-serif text-body">{r.title}</p>
-                <p className="mt-1 text-caption text-ink-muted">{r.modules.join(', ')}</p>
-                <p className="mt-2 text-caption">
-                  ক্রেডিট {formatNumber(r.credit)}, নম্বর {formatNumber(r.marks)}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        {/* The one ruled kitab table used across the site; totals computed from the rows. */}
+        <CurriculumTable
+          rows={PYS_SEM1}
+          locale="bn"
+          labels={{
+            code: 'কোড',
+            course: 'কোর্স',
+            modules: 'মডিউল',
+            credits: 'ক্রেডিট',
+            hours: 'ঘণ্টা',
+            marks: 'নম্বর',
+            total: 'মোট',
+          }}
+        />
       </Spec>
 
       <Spec id="notices" title="নোটিশ তালিকা">

@@ -5,6 +5,7 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Courses } from './collections/Courses'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { People } from './collections/People'
@@ -82,7 +83,7 @@ export default buildConfig({
     defaultLocale: 'bn',
     fallback: true,
   },
-  collections: [Pages, Posts, People, Media, Categories, Users],
+  collections: [Pages, Posts, People, Courses, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [SiteSettings, Navigation, ImpactStats],
   plugins,
