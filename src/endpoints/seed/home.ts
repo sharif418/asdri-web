@@ -74,6 +74,7 @@ export const homeSeed = {
         blockType: 'campusLife',
         enabled: true,
         heading: 'ক্যাম্পাস জীবন',
+        intro: 'একটি আদর্শ ইসলামী পরিবেশে শিক্ষার্থীদের মেধা ও মনন বিকাশে আস-সুন্নাহ ইনস্টিটিউটের ক্যাম্পাস লাইফ অত্যন্ত প্রাণবন্ত। আমাদের নিয়মিত কার্যক্রমের মধ্যে রয়েছে:',
         items: [
           {
             title: 'বুদ্ধিবৃত্তিক চর্চা',
@@ -181,6 +182,7 @@ export const homeSeed = {
         blockType: 'campusLife',
         enabled: true,
         heading: 'Campus Life',
+        intro: 'Campus life at the As-Sunnah Institute is lively, nurturing students’ intellect and character within an ideal Islamic environment. Regular activities include:',
         items: [
           {
             title: 'Intellectual discussions',

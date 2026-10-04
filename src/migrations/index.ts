@@ -5,6 +5,8 @@ import * as migration_20261003_153157_people_collection from './20261003_153157_
 import * as migration_20261003_163402_courses_collection from './20261003_163402_courses_collection';
 import * as migration_20261003_165551_notices_collection from './20261003_165551_notices_collection';
 import * as migration_20261003_173258_home_global from './20261003_173258_home_global';
+import * as migration_20261003_184057_faqs_downloads_alumni_globals from './20261003_184057_faqs_downloads_alumni_globals';
+import * as migration_20261003_184124_categories_localised_title from './20261003_184124_categories_localised_title';
 
 export const migrations = [
   {
@@ -41,5 +43,15 @@ export const migrations = [
     up: migration_20261003_173258_home_global.up,
     down: migration_20261003_173258_home_global.down,
     name: '20261003_173258_home_global',
+  },
+  {
+    up: migration_20261003_184057_faqs_downloads_alumni_globals.up,
+    down: migration_20261003_184057_faqs_downloads_alumni_globals.down,
+    name: '20261003_184057_faqs_downloads_alumni_globals',
+  },
+  {
+    up: migration_20261003_184124_categories_localised_title.up,
+    down: migration_20261003_184124_categories_localised_title.down,
+    name: '20261003_184124_categories_localised_title',
   },
 ];

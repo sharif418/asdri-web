@@ -16,6 +16,14 @@ Admissions: intakes, application form, applicant account, status tracking, admin
 Donations: funds, one-time donation via gateway adapter (sandbox until credentials), receipt PDF + email, anonymous flag, zakat calculator, donations ledger.
 Exit: client reviews live staging; content gaps filled by staff via admin.
 
+Progress after batch A (PRs #5–#9):
+
+- [x] site-settings & navigation, home, about pages (vision, leadership, campus, alumni), courses (7) with curriculum, faculty directory, SDP, downloads incl. dawah materials, admission process, scholarships, FAQ, notices board, contact, other websites, i18n BN/EN, SEO, seed data from client docs
+- [ ] blog (without comments), gallery
+- [ ] admin roles
+- [ ] Admissions: intakes, application form, applicant account, status tracking, admin review, CSV export
+- [ ] Donations: funds, gateway adapter, receipt PDF + email, anonymous flag, zakat calculator, donations ledger
+
 ## Phase 2 — Knowledge platform (weeks 8–12)
 
 Fatwa workflow + public bank + PDF; clarifications topic hub + counter-questions; library & journals with pdf.js reader, metadata, abstract view, citation generator; books; research projects, calls for papers with submission; videos & playlists (YouTube), audio-only; news & events with countdown; Facebook import; blog comments with moderation; global search (Postgres FTS or Meilisearch if volume demands).

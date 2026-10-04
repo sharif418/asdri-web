@@ -6,7 +6,7 @@ import type { Home, Media } from '@/payload-types'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 import { cn } from '@/utilities/ui'
 
-type CampusBlock = Extract<
+export type CampusBlock = Extract<
   NonNullable<Home['sections']>[number],
   { blockType: 'campusLife' }
 >
@@ -25,6 +25,11 @@ export function CampusSection({ block }: { block: CampusBlock }) {
     <section className="border-y border-border bg-paper-2 py-16 md:py-20">
       <div className="container">
         <h2 className="text-h3">{block.heading}</h2>
+        {block.intro && (
+          <p className="mt-4 max-w-[60ch] text-body leading-relaxed text-ink-muted">
+            {block.intro}
+          </p>
+        )}
         <ul className="mt-8 grid gap-x-10 gap-y-0 md:grid-cols-2">
           {items.map((item, i) => {
             const image =

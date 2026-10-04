@@ -35,11 +35,11 @@ Deliver: the PR link, a short summary of what was built, and any gap-register ro
 |-------|------------|-----|
 | 1 | ✅ Design tokens + type specimen page `/design`; fonts; colour tokens; base components (PR #1) | 05-design-direction §2–4 |
 | 2 | ✅ `site-settings`, `navigation`, `impact-stats` globals + Header/Footer + locale routing and switcher + seed (PR #2) | REQ-GEN-01..04, REQ-HOME-02, 12 |
-| 3 | `people` collection + Leadership page + Faculty directory + profile | REQ-ABT-02, REQ-ACA-10 |
-| 4 | `courses` collection with curriculum tables + seed of 7 courses from source | REQ-ACA-01..09 |
-| 5 | `notices` + board + status badge + attachments | REQ-NOT-01..06, REQ-HOME-06 |
-| 6 | Home page blocks (hero, vision, programmes, campus, leadership, support bar) | REQ-HOME-01..10 |
-| 7 | `faqs`, `downloads`, static About/Admissions pages seeded from source | REQ-ADM-01..04, REQ-ACA-11..12, REQ-ABT-01, 03, 04 |
+| 3 | ✅ `people` collection + Leadership page + Faculty directory + profile | REQ-ABT-02, REQ-ACA-10 |
+| 4 | ✅ `courses` collection with curriculum tables + seed of 7 courses from source | REQ-ACA-01..09 |
+| 5 | ✅ `notices` + board + status badge + attachments | REQ-NOT-01..06, REQ-HOME-06 |
+| 6 | ✅ Home page blocks (hero, vision, programmes, campus, leadership, support bar) | REQ-HOME-01..10 |
+| 7 | ✅ `faqs`, `downloads`, static About/Admissions pages seeded from source | REQ-ADM-01..04, REQ-ACA-11..12, REQ-ABT-01, 03, 04 |
 | 8 | Admissions: `intakes`, `applications`, apply form, applicant account | REQ-ADM-05..06, REQ-AUTH-01..03 |
 | 9 | Donations: `funds`, gateway abstraction (SSLCommerz sandbox), receipt PDF, zakat calculator | REQ-DON-01..05, 13, ADR-0003 |
 | 10 | Blog + gallery + contact | REQ-MED-01, 02, 05, REQ-CON-01..03 |

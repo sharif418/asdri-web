@@ -135,7 +135,16 @@ export const SiteSettings: GlobalConfig = {
               relationTo: 'media',
               admin: {
                 description:
-                  'QR code image shown in the footer for admission updates (REQ-CON-03).',
+                  'QR code image shown in the footer and on the contact page for admission updates (REQ-CON-03).',
+              },
+            },
+            {
+              name: 'admissionNote',
+              type: 'textarea',
+              localized: true,
+              admin: {
+                description:
+                  'The admission-info note on the contact page (REQ-CON-03), verbatim from the client document — where admission notices are announced.',
               },
             },
             {
