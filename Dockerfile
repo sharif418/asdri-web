@@ -11,13 +11,16 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-# Build-time env: Payload needs these to compile the admin and generate pages.
-ARG DATABASE_URL
-ARG PAYLOAD_SECRET
+# Build-time env. The build never touches a database (the public site is force-dynamic) and the
+# admin bundle only needs *a* secret to compile, so these are fixed dummies that exist only in this
+# stage. They are deliberately NOT build args: Coolify's compose parser merges hard-coded build args
+# into the runtime env store under the same key, which once pointed staging at 127.0.0.1:1.
+# Real DATABASE_URL / PAYLOAD_SECRET come from the runtime environment only.
+ENV DATABASE_URL=postgres://build:build@127.0.0.1:1/build \
+    PAYLOAD_SECRET=build-only-secret-not-used-at-runtime
+# The only genuine build-time input: NEXT_PUBLIC_* values are inlined into the client bundle.
 ARG NEXT_PUBLIC_SERVER_URL
-ENV DATABASE_URL=$DATABASE_URL \
-    PAYLOAD_SECRET=$PAYLOAD_SECRET \
-    NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
+ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 RUN bun run build
 
 FROM node:24-alpine AS runner
