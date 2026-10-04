@@ -34,7 +34,7 @@ export function LocaleSwitcher({
             {i > 0 && (
               <span
                 aria-hidden
-                className={tone === 'paper' ? 'text-primary-foreground/40' : 'text-border'}
+                className={tone === 'paper' ? 'text-band-foreground/40' : 'text-border'}
               >
                 |
               </span>
@@ -48,10 +48,10 @@ export function LocaleSwitcher({
                 'rounded-sm px-1.5 py-1 transition-colors',
                 active
                   ? tone === 'paper'
-                    ? 'font-semibold text-primary-foreground'
+                    ? 'font-semibold text-band-foreground'
                     : 'font-semibold text-primary'
                   : tone === 'paper'
-                    ? 'text-primary-foreground/75 hover:text-primary-foreground'
+                    ? 'text-band-foreground/75 hover:text-band-foreground'
                     : 'text-ink-muted hover:text-foreground',
               )}
             >

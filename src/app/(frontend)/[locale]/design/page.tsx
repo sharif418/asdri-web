@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import React from 'react'
 
 import { MarginFact, MarginFacts, MatnHashiya } from '@/components/layout/MatnHashiya'
 import { CurriculumTable } from '@/components/courses/CurriculumTable'
+import { PersonMonogram } from '@/components/people/PersonMonogram'
+import { SectionHead } from '@/components/site/SectionHead'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
@@ -102,6 +105,7 @@ const SWATCHES = [
   { name: 'Rule', token: 'bg-border', note: 'hairlines' },
   { name: 'Ink', token: 'bg-foreground', note: 'text' },
   { name: 'Ink muted', token: 'bg-ink-muted', note: 'secondary text' },
+  { name: 'Ink deep', token: 'bg-ink-deep', note: 'footer band' },
   { name: 'Mihrab green', token: 'bg-primary', note: 'primary' },
   { name: 'Mihrab deep', token: 'bg-primary-deep', note: 'pressed, dark bands' },
   { name: 'Green soft', token: 'bg-primary-soft', note: 'selected, chips' },
@@ -281,6 +285,102 @@ export default function DesignSpecimenPage() {
             </p>
           </div>
         </MatnHashiya>
+      </Spec>
+
+      <Spec id="home-devices" title="হোম পেজের ডিভাইস">
+        {/* The devices the home page is composed of (docs/08 “Devices”). They are system
+            components, not home-only helpers: SectionHead, the slip, headword rows, the
+            statement, and the seal monogram. */}
+        <div className="space-y-12">
+          <div>
+            <p className="text-caption text-ink-muted">
+              সেকশন শিরোনাম — সেকশন শুরু হয় রেখা দিয়ে, হেডিং সেরিফে, ডানে সেই বিভাগের পূর্ণ পাতার ঠিকানা
+            </p>
+            <div className="mt-4">
+              <SectionHead
+                heading="চলমান কোর্সসমূহ"
+                rule
+                action={{ href: '#', label: 'সব কোর্স' }}
+              />
+            </div>
+          </div>
+
+          <div>
+            <p className="text-caption text-ink-muted">
+              লেবেল সংস্করণ — যে সেকশনের কনটেন্টই মূল, সেখানে হেডিং ছোট থাকে (এক নজরে, মূল লক্ষ্য)
+            </p>
+            <div className="mt-4">
+              <SectionHead heading="এক নজরে" variant="label" rule />
+            </div>
+          </div>
+
+          <div>
+            <p className="text-caption text-ink-muted">
+              স্লিপ — হিরোর মার্জিনের ভর্তি নোটিশ: কার্ডের উপরিতলে, ১px বর্ডার, পূর্ণ-প্রস্থ আবেদন বাটন
+            </p>
+            <div className="mt-4 max-w-sm">
+              <div className="rounded-sm border border-border bg-card p-5 md:p-6">
+                <p className="font-sans text-caption text-ink-muted">ভর্তি বিজ্ঞপ্তি</p>
+                <h3 className="mt-2 font-serif text-h4 font-semibold leading-snug">
+                  <Link href="#" className="text-foreground underline-offset-4 hover:text-primary hover:underline">
+                    সার্টিফিকেট কোর্স ইন ইসলামিক স্টাডিজ: ২য় ব্যাচে ভর্তি বিজ্ঞপ্তি
+                  </Link>
+                </h3>
+                <dl className="mt-4 divide-y divide-border border-y border-border font-sans text-small">
+                  <div className="grid grid-cols-[minmax(7rem,2fr)_3fr] gap-x-4 py-2.5">
+                    <dt className="text-ink-muted">অবস্থা</dt>
+                    <dd>আবেদন চলছে</dd>
+                  </div>
+                  <div className="grid grid-cols-[minmax(7rem,2fr)_3fr] gap-x-4 py-2.5">
+                    <dt className="text-ink-muted">আবেদনের শেষ তারিখ</dt>
+                    <dd>{formatDate('2026-10-15')}</dd>
+                  </div>
+                </dl>
+                <Button asChild className="mt-5 w-full">
+                  <Link href="#">অনলাইনে আবেদন করুন</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-caption text-ink-muted">
+              শিরোনাম-সারি (গ্লসারি) — মার্জিনে শব্দ, পাশে ব্যাখ্যা; ক্যাম্পাস জীবন এভাবেই সাজানো
+            </p>
+            <ul className="mt-4">
+              {[
+                { t: 'পাঠচক্র', d: 'নির্ধারিত পাঠ্যক্রমের বাইরে নির্দিষ্ট বইয়ের ওপর নিয়মিত গ্রুপ স্টাডি।' },
+                { t: 'শরীরচর্চা', d: 'মাসিক ইনডোর ও আউটডোর খেলাধুলা, বার্ষিক শিক্ষা সফর।' },
+              ].map((row) => (
+                <li key={row.t} className="grid gap-2 border-t border-border py-5 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-x-6">
+                  <h3 className="font-serif text-h4 font-semibold md:pt-1">{row.t}</h3>
+                  <p className="text-small leading-relaxed text-ink-muted md:pt-1">{row.d}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-caption text-ink-muted">
+              বিবৃতি — ঘোষণামূলক বাক্য, হেডিং ও পাঠের মাঝের এক ধাপ (মূল লক্ষ্য, সহযোগিতা ব্যান্ড)
+            </p>
+            <p className="mt-4 max-w-[54ch] font-serif text-statement">
+              যোগ্য শিক্ষার্থীরা এখানে বিনামূল্যে পড়ে, থাকে ও খায় — পুরো খরচ বহন করে আস-সুন্নাহ
+              ফাউন্ডেশনের যাকাত ফান্ড।
+            </p>
+          </div>
+
+          <div>
+            <p className="text-caption text-ink-muted">
+              সিলমোনোগ্রাম — ছবি না থাকলে বর্গ প্যানেলে নামের প্রথম অক্ষর, সেরিফে (মোহরের আকৃতি)
+            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-6">
+              <PersonMonogram person={{ name: 'মুহাম্মদ আব্দুল্লাহ', photo: null }} size="lg" />
+              <PersonMonogram person={{ name: 'আব্দুর রহমান', photo: null }} size="lg" />
+              <PersonMonogram person={{ name: 'সাইফুল ইসলাম', photo: null }} />
+            </div>
+          </div>
+        </div>
       </Spec>
 
       <Spec id="table" title="কারিকুলাম টেবিল">

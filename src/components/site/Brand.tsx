@@ -35,7 +35,7 @@ export function Brand({
       href={href}
       className={cn(
         'group inline-flex items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4',
-        tone === 'paper' ? 'text-primary-foreground' : 'text-foreground',
+        tone === 'paper' ? 'text-band-foreground' : 'text-foreground',
         className,
       )}
     >
@@ -60,7 +60,7 @@ export function Brand({
           <span
             className={cn(
               'mt-1 inline-flex items-center gap-1.5 whitespace-nowrap text-caption',
-              tone === 'paper' ? 'text-primary-foreground/75' : 'text-ink-muted',
+              tone === 'paper' ? 'text-band-foreground/75' : 'text-ink-muted',
               parentLineClassName,
             )}
           >

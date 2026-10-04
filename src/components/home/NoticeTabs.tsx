@@ -24,8 +24,6 @@ export function NoticeTabs({
   notices,
   locale,
   dict,
-  boardHref,
-  boardLabel,
 }: {
   notices: Record<Tab, Notice[]>
   locale: Locale
@@ -38,8 +36,6 @@ export function NoticeTabs({
     statusClosed: string
     emptyBody: string
   }
-  boardHref: string
-  boardLabel: string
 }) {
   const [tab, setTab] = useState<Tab>('all')
   const list = notices[tab] ?? []
@@ -122,15 +118,6 @@ export function NoticeTabs({
             ))}
           </ul>
         )}
-
-        <div className="mt-6">
-          <Link
-            href={boardHref}
-            className="text-small font-medium text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary"
-          >
-            {boardLabel}
-          </Link>
-        </div>
       </div>
     </div>
   )

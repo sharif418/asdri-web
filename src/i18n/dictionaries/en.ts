@@ -34,6 +34,9 @@ const en: Dictionary = {
     deadline: 'Application deadline',
     readNotice: 'Read the notice',
     allAdmissionNotices: 'All admission notices',
+    seeAllCourses: 'All courses',
+    seeAllFaculty: 'Faculty directory',
+    flagshipProgramme: 'Principal programme',
   },
   people: {
     leadershipTitle: 'Leadership & Administration',

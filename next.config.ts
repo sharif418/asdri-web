@@ -14,6 +14,11 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 const nextConfig: NextConfig = {
   // Required by the Dockerfile (self-contained server.js for Coolify).
   output: 'standalone',
+  // The floating dev-tools badge is disabled so development screenshots of the running site
+  // (docs/review/) are clean for design review; it never appears in production anyway.
+  devIndicators: false,
+  // The floating dev-tools badge is disabled so development screenshots of the running site
+  // (docs/review/) are clean for design review; it never appears in production anyway.
   // Temporarily required on Windows until Next.js fixes Turbopack Sass resolution.
   // See: https://github.com/vercel/next.js/issues/86431
   sassOptions: {

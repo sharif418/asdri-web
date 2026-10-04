@@ -11,10 +11,11 @@ import { formatDate } from '@/utilities/formatNumber'
 import { noticeStatus } from '@/utilities/noticeStatus'
 
 /**
- * The hero's margin note (hashiya): what a visitor who came to apply needs first. With an open
- * admission notice it is a slip — title, status, deadline, the apply action. Without one it is
- * the office's own admission note and the three standing admission pages as ruled rows. Plain
- * text for the status (the gold "new" badge would be a second illumination beside the hairline).
+ * The hero's margin note (hashiya), set as a slip: a small bordered panel on the card surface,
+ * the way a notice is pinned into the margin of a noticeboard. With an open admission notice it
+ * carries the title, the facts (status, deadline, published) and the apply action; without one
+ * it is the office's own admission note over the three standing admission pages. The facts stay
+ * plain text — the gold "new" badge would be a second illumination beside the hero hairline.
  */
 export function HeroMargin({
   notice,
@@ -42,7 +43,7 @@ export function HeroMargin({
     const applyIsExternal = applyHref ? /^https?:\/\//.test(applyHref) : false
 
     return (
-      <div>
+      <div className="rounded-sm border border-border bg-card p-5 md:p-6">
         <p className="font-sans text-caption text-ink-muted">{dict.home.admissionSlipTitle}</p>
         <h2 className="mt-2 font-serif text-h4 font-semibold leading-snug">
           <Link
@@ -52,7 +53,7 @@ export function HeroMargin({
             {notice.title}
           </Link>
         </h2>
-        <dl className="mt-5 divide-y divide-border border-y border-border font-sans text-small">
+        <dl className="mt-4 divide-y divide-border border-y border-border font-sans text-small">
           {statusLabel && <Fact term={dict.notices.statusLabel} detail={statusLabel} />}
           {notice.activeUntil && (
             <Fact term={dict.home.deadline} detail={formatDate(notice.activeUntil, locale)} />
@@ -61,23 +62,22 @@ export function HeroMargin({
             <Fact term={dict.notices.publishedLabel} detail={formatDate(notice.publishedAt, locale)} />
           )}
         </dl>
-        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
-          {applyHref &&
-            (applyIsExternal ? (
-              <Button asChild>
-                <a href={applyHref} target="_blank" rel="noopener noreferrer">
-                  {dict.notices.applyOnline}
-                </a>
-              </Button>
+        {applyHref && (
+          <Button asChild className="mt-5 w-full">
+            {applyIsExternal ? (
+              <a href={applyHref} target="_blank" rel="noopener noreferrer">
+                {dict.notices.applyOnline}
+              </a>
             ) : (
-              <Button asChild>
-                <Link href={localizedHref(locale, applyHref)}>{dict.notices.applyOnline}</Link>
-              </Button>
-            ))}
-          <Button asChild variant="link">
+              <Link href={localizedHref(locale, applyHref)}>{dict.notices.applyOnline}</Link>
+            )}
+          </Button>
+        )}
+        <p className="mt-3 text-center">
+          <Button asChild variant="link" className="text-small">
             <Link href={noticeHref}>{dict.home.readNotice}</Link>
           </Button>
-        </div>
+        </p>
       </div>
     )
   }
@@ -89,15 +89,17 @@ export function HeroMargin({
   ]
 
   return (
-    <div>
+    <div className="rounded-sm border border-border bg-card p-5 md:p-6">
       <p className="font-sans text-caption text-ink-muted">{dict.home.marginLabel}</p>
-      {admissionNote && <p className="mt-2 font-sans text-small text-ink-muted">{admissionNote}</p>}
-      <ul className="mt-5 divide-y divide-border border-y border-border font-sans">
+      {admissionNote && (
+        <p className="mt-2 font-sans text-small leading-relaxed text-ink-muted">{admissionNote}</p>
+      )}
+      <ul className="mt-4 divide-y divide-border border-y border-border font-sans">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={localizedHref(locale, link.href)}
-              className="block py-3 text-small font-medium text-foreground hover:text-primary"
+              className="block py-3 text-small font-medium text-foreground underline-offset-4 hover:text-primary"
             >
               {link.label}
             </Link>

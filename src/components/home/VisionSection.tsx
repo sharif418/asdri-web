@@ -2,38 +2,42 @@ import React from 'react'
 
 import type { Home } from '@/payload-types'
 
+import { SectionHead } from '@/components/site/SectionHead'
+
 type VisionBlock = Extract<
   NonNullable<Home['sections']>[number],
   { blockType: 'vision' }
 >
 
 /**
- * The vision statement and its three pillars (REQ-HOME-03). The statement is the client's own
- * text in the reading column; the pillars render as a ruled list when present (the client's
- * document gives them in English; the Bangla ones are seeded drafts for the office to confirm
- * — review item 10). Not numbered: the pillars are not a sequence.
+ * The vision (REQ-HOME-03) as the institute's charter: the heading set small as the label on
+ * its rule, and the client's own statement — their words, not ours — raised to the statement
+ * scale, the page's second typographic moment after the hero. The pillars follow as three
+ * ruled columns (not numbered: they are dimensions, not a sequence). The Bangla pillar texts
+ * are seeded drafts for the office to confirm (review item 10 of batch A).
  */
 export function VisionSection({ block }: { block: VisionBlock }) {
   const pillars = block.pillars ?? []
 
   return (
-    <section className="container pb-20">
-      <div className="grid gap-8 lg:grid-cols-12 lg:gap-x-10">
-        <h2 className="text-h3 lg:col-span-3">{block.heading}</h2>
-        <div className="lg:col-span-9">
-          <p className="reading">{block.statement}</p>
-          {pillars.length > 0 && (
-            <ul className="mt-10 divide-y divide-border border-y border-border">
-              {pillars.map((pillar, i) => (
-                <li key={pillar.id ?? i} className="py-4">
-                  <h3 className="font-serif text-h4 font-semibold">{pillar.title}</h3>
-                  <p className="mt-1 max-w-[68ch] text-body text-ink-muted">{pillar.body}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
+    <section className="container py-20 md:py-28" aria-label={block.heading}>
+      <SectionHead heading={block.heading} variant="label" rule />
+      <p className="mt-8 max-w-[54ch] font-serif text-statement text-foreground md:mt-10">
+        {block.statement}
+      </p>
+      {pillars.length > 0 && (
+        <ul className="mt-12 grid gap-y-8 md:mt-16 md:grid-cols-3 md:gap-x-10 md:gap-y-0 md:border-t md:border-border md:pt-10">
+          {pillars.map((pillar, i) => (
+            <li
+              key={pillar.id ?? i}
+              className="border-t border-border pt-6 md:border-l md:border-t-0 md:pl-8 md:pt-0 md:first:border-l-0 md:first:pl-0"
+            >
+              <h3 className="font-serif text-h4 font-semibold">{pillar.title}</h3>
+              <p className="mt-2 text-small leading-relaxed text-ink-muted">{pillar.body}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   )
 }
