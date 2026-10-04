@@ -51,7 +51,7 @@ export function Brand({
         <span
           className={cn(
             'font-serif font-semibold leading-tight',
-            compact ? 'text-[1.05rem]' : 'text-[1.15rem] md:text-[1.35rem] lg:text-[1.5rem]',
+            compact ? 'whitespace-nowrap text-[1.05rem]' : 'text-[1.15rem] md:text-[1.35rem] lg:text-[1.5rem]',
           )}
         >
           {name}

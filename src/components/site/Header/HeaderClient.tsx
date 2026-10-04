@@ -161,7 +161,7 @@ export function HeaderClient({
         </div>
 
         {/* Row 2: masthead — the only bar on mobile, carried by the sticky header above. */}
-        <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85 lg:border-b-0 lg:bg-background lg:backdrop-blur-none">
+        <div className="border-b border-border bg-background lg:border-b-0">
           <div className="container flex h-16 items-center justify-between gap-4 lg:h-24">
             <Brand
               name={brand.name}
@@ -202,13 +202,13 @@ export function HeaderClient({
           the top of the screen for the whole page and condenses once the masthead is gone. */}
       <div
         ref={navRowRef}
-        className="hidden border-y border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85 lg:sticky lg:top-0 lg:z-40 lg:block"
+        className="hidden border-y border-border bg-background lg:sticky lg:top-0 lg:z-40 lg:block"
       >
         <div className="container flex items-center gap-3">
           <div
             className={cn(
               'shrink-0 overflow-hidden transition-[max-width,opacity,visibility] duration-200',
-              condensed ? 'visible max-w-44 opacity-100' : 'invisible max-w-0 opacity-0',
+              condensed ? 'visible max-w-72 opacity-100' : 'invisible max-w-0 opacity-0',
             )}
           >
             <Brand name={brand.shortName} href={brand.href} compact />

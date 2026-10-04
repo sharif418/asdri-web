@@ -55,12 +55,22 @@ export function CampusSection({ block }: { block: CampusBlock }) {
                     />
                   </span>
                 )}
-                <div className="min-w-0">
-                  <h3 className="font-serif text-h4 font-semibold md:pt-1">{item.title}</h3>
-                  <p className="mt-2 text-small leading-relaxed text-ink-muted md:pt-1">
-                    {item.body}
-                  </p>
-                </div>
+                {/* Headword in the margin column, gloss beside it: two grid children, so the
+                    text never collapses into the 11rem headword column. With an image the
+                    image takes the margin and the text stacks beside it. */}
+                {hasImage ? (
+                  <div className="min-w-0">
+                    <h3 className="font-serif text-h4 font-semibold md:pt-1">{item.title}</h3>
+                    <p className="mt-2 text-small leading-relaxed text-ink-muted">{item.body}</p>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="font-serif text-h4 font-semibold md:pt-1">{item.title}</h3>
+                    <p className="min-w-0 text-small leading-relaxed text-ink-muted md:pt-1.5">
+                      {item.body}
+                    </p>
+                  </>
+                )}
               </li>
             )
           })}
